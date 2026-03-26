@@ -15,7 +15,7 @@ body{display:flex;flex-direction:column;justify-content:center;align-items:cente
 .card{transform-style:preserve-3d;position:relative;width:100%}
 #time-text,#event-text{font-size:clamp(20px,5vw,40px);font-weight:300;letter-spacing:0.01em;line-height:1.5;opacity:0.9}
 #time-text{margin-bottom:0.3em}
-#seconds-text{font-size:clamp(12px,2.8vw,20px);font-weight:200;letter-spacing:0.2em;opacity:0.25;margin-top:1.8em;font-variant-numeric:tabular-nums}
+#seconds-text{font-size:clamp(14px,3vw,22px);font-weight:200;letter-spacing:0.2em;opacity:0.5;margin-top:1.5em;font-variant-numeric:tabular-nums}
 #date-text{font-size:clamp(11px,2.5vw,16px);font-weight:300;letter-spacing:0.05em;opacity:0.35;margin-top:1.2em}
 #logo{position:fixed;bottom:max(20px,env(safe-area-inset-bottom,20px));left:50%;transform:translateX(-50%);font-size:12px;font-weight:300;letter-spacing:0.35em;opacity:0.2;pointer-events:none}
 @keyframes flipOut{0%{transform:rotateX(0deg);opacity:1}50%{transform:rotateX(-90deg);opacity:0}100%{transform:rotateX(-90deg);opacity:0}}
@@ -40,8 +40,7 @@ let wakeLock=null;
 async function requestWakeLock(){try{wakeLock=await navigator.wakeLock.request('screen')}catch(e){}}
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')requestWakeLock()});
 let lastKey='';
-function updateSeconds(){const now=new Date();const s=pad(now.getSeconds());document.getElementById('seconds-text').textContent=':'+s;}
-function update(){const now=new Date();const h=now.getHours(),m=now.getMinutes();const k=pad(h)+':'+pad(m);updateSeconds();if(k===lastKey)return;lastKey=k;const timeStr=getTimeStr(h,m);const ev=findEvent(h,m);const timeEl=document.getElementById('time-text');const eventEl=document.getElementById('event-text');const dateEl=document.getElementById('date-text');const container=document.querySelector('.card');container.classList.remove('flip-in');container.classList.add('flip-out');setTimeout(()=>{timeEl.textContent=timeStr;if(ev){eventEl.innerHTML=ev.t.replace(/\\n/g,'<br>');dateEl.textContent='('+ev.d+')';}else{const next=findNext(h,m);if(next.mins<=60){eventEl.innerHTML='앞으로 '+next.mins+'분 후<br>하나의 사건이 발생합니다';}else{const hrs=Math.floor(next.mins/60);const mins=next.mins%60;eventEl.innerHTML='앞으로 '+hrs+'시간 '+mins+'분 후<br>하나의 사건이 발생합니다';}dateEl.textContent='';}container.classList.remove('flip-out');container.classList.add('flip-in');},350);}
+function update(){const now=new Date();const h=now.getHours(),m=now.getMinutes(),s=now.getSeconds();document.getElementById('seconds-text').textContent=':'+pad(s);const k=pad(h)+':'+pad(m);if(k===lastKey)return;lastKey=k;const timeStr=getTimeStr(h,m);const ev=findEvent(h,m);const timeEl=document.getElementById('time-text');const eventEl=document.getElementById('event-text');const dateEl=document.getElementById('date-text');const container=document.querySelector('.card');container.classList.remove('flip-in');container.classList.add('flip-out');setTimeout(()=>{timeEl.textContent=timeStr;if(ev){eventEl.innerHTML=ev.t.replace(/\\n/g,'<br>');dateEl.textContent='('+ev.d+')';}else{const next=findNext(h,m);if(next.mins<=60){eventEl.innerHTML='앞으로 '+next.mins+'분 후<br>하나의 사건이 발생합니다';}else{const hrs=Math.floor(next.mins/60);const mins=next.mins%60;eventEl.innerHTML='앞으로 '+hrs+'시간 '+mins+'분 후<br>하나의 사건이 발생합니다';}dateEl.textContent='';}container.classList.remove('flip-out');container.classList.add('flip-in');},350);}
 requestWakeLock();update();setInterval(update,1000);
 let logoVisible=true;document.body.addEventListener('click',()=>{logoVisible=!logoVisible;document.getElementById('logo').style.opacity=logoVisible?'0.2':'0';});
 </script></body></html>
