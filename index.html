@@ -19,11 +19,11 @@ body.beige-mode{background:#f5f0e8;color:#2a2520}
 body.navy-mode{background:#0a1628;color:#c8d6e5}
 
 /* 초침 테마별 색상 */
-body.light-mode #second-hand{stroke:rgba(0,0,0,0.25)}
+body.light-mode #second-hand{fill:rgba(0,0,0,0.25)}
 body.light-mode #second-hand-container circle{fill:rgba(0,0,0,0.12)}
-body.beige-mode #second-hand{stroke:rgba(42,37,32,0.25)}
+body.beige-mode #second-hand{fill:rgba(42,37,32,0.25)}
 body.beige-mode #second-hand-container circle{fill:rgba(42,37,32,0.12)}
-body.navy-mode #second-hand{stroke:rgba(200,214,229,0.25)}
+body.navy-mode #second-hand{fill:rgba(200,214,229,0.25)}
 body.navy-mode #second-hand-container circle{fill:rgba(200,214,229,0.12)}
 #clock-container{perspective:800px;width:100%;max-width:600px;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;flex:1}
 .card{transform-style:preserve-3d;position:relative;width:100%}
@@ -33,8 +33,8 @@ body.navy-mode #second-hand-container circle{fill:rgba(200,214,229,0.12)}
 #second-hand-container{position:fixed;top:50%;left:50%;width:min(85vw,85vh);height:min(85vw,85vh);transform:translate(-50%,-50%);pointer-events:none;z-index:0}
 #second-number{position:fixed;bottom:clamp(20px,5vw,40px);right:clamp(20px,5vw,40px);font-size:clamp(100px,25vw,200px);font-weight:100;opacity:0.3;pointer-events:none;z-index:0;letter-spacing:0em;display:none;line-height:1;font-variant-numeric:tabular-nums}
 #clock-container{position:relative;z-index:1}
-#logo{position:fixed;bottom:max(20px,env(safe-area-inset-bottom,20px));right:clamp(16px,3vw,24px);opacity:0.15;pointer-events:none;transition:opacity 0.3s ease}
-#logo img{height:clamp(10px,1.8vw,16px);width:auto;display:block;filter:brightness(0) invert(1)}
+#logo{position:fixed;bottom:max(20px,env(safe-area-inset-bottom,20px));right:clamp(24px,4vw,36px);opacity:0.15;pointer-events:none;transition:opacity 0.3s ease}
+#logo img{height:clamp(12px,2.16vw,19.2px);width:auto;display:block;filter:brightness(0) invert(1)}
 body.light-mode #logo img{filter:brightness(0)}
 body.beige-mode #logo img{filter:brightness(0) sepia(0.4)}
 body.navy-mode #logo img{filter:brightness(0) invert(1)}
@@ -130,7 +130,7 @@ body.clock-ready #logo{opacity:0.2}
 </div>
 
 <svg id="second-hand-container" viewBox="0 0 400 400" overflow="visible">
-<line id="second-hand" x1="200" y1="200" x2="200" y2="-684" stroke="rgba(255,255,255,0.3)" stroke-width="1.2" stroke-linecap="round" style="transition:stroke 1.5s ease"/>
+<polygon id="second-hand" points="199.4,200 200.6,200 200,-684" fill="rgba(255,255,255,0.3)" style="transition:fill 1.5s ease"/>
 <circle cx="200" cy="200" r="3" fill="rgba(255,255,255,0.15)" style="transition:fill 1.5s ease"/>
 </svg>
 <div id="second-number">00</div>
