@@ -9,10 +9,10 @@
 <title>History Clock</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400&family=EB+Garamond:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400&family=EB+Garamond:wght@400;700&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-html,body{width:100%;height:100%;overflow:hidden;background:#000;color:#fff;font-family:'Noto Serif KR','EB Garamond','Georgia','Times New Roman',serif;font-weight:400;-webkit-font-smoothing:antialiased;user-select:none;-webkit-user-select:none;transition:background-color 1.5s ease,color 1.5s ease}
+html,body{width:100%;height:100%;overflow:hidden;background:#000;color:#fff;font-family:'Gowun Batang','EB Garamond','Georgia','Times New Roman',sans-serif;font-weight:400;-webkit-font-smoothing:antialiased;user-select:none;-webkit-user-select:none;transition:background-color 1.5s ease,color 1.5s ease}
 body{display:flex;flex-direction:column;justify-content:center;align-items:center;padding:env(safe-area-inset-top) 8vw env(safe-area-inset-bottom)}
 body.light-mode{background:#fff;color:#000}
 body.beige-mode{background:#f5f0e8;color:#2a2520}
@@ -27,11 +27,11 @@ body.navy-mode #second-hand{stroke:rgba(200,214,229,0.25)}
 body.navy-mode #second-hand-container circle{fill:rgba(200,214,229,0.12)}
 #clock-container{perspective:800px;width:100%;max-width:600px;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;flex:1}
 .card{transform-style:preserve-3d;position:relative;width:100%}
-#time-text,#event-text{font-size:clamp(20px,5vw,40px);font-weight:300;letter-spacing:0.01em;line-height:1.4;opacity:0.9}
+#time-text,#event-text{font-size:clamp(20px,5vw,40px);font-weight:300;letter-spacing:0em;line-height:1.4;opacity:0.9}
 #time-text{margin-bottom:0.3em}
-#date-text{font-size:clamp(13px,2.5vw,18px);font-weight:300;letter-spacing:0.05em;opacity:0.35;margin-top:1em}
+#date-text{font-size:clamp(13px,2.5vw,18px);font-weight:300;letter-spacing:0em;opacity:0.35;margin-top:1em}
 #second-hand-container{position:fixed;top:50%;left:50%;width:min(85vw,85vh);height:min(85vw,85vh);transform:translate(-50%,-50%);pointer-events:none;z-index:0}
-#second-number{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);font-size:clamp(100px,25vw,200px);font-weight:100;opacity:0.055;pointer-events:none;z-index:0;letter-spacing:-0.04em;display:none;line-height:1;font-variant-numeric:tabular-nums}
+#second-number{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);font-size:clamp(100px,25vw,200px);font-weight:100;opacity:0.055;pointer-events:none;z-index:0;letter-spacing:0em;display:none;line-height:1;font-variant-numeric:tabular-nums}
 #clock-container{position:relative;z-index:1}
 #logo{position:fixed;bottom:max(20px,env(safe-area-inset-bottom,20px));left:50%;transform:translateX(-50%);opacity:0.2;pointer-events:none;transition:opacity 0.3s ease}
 #logo img{height:clamp(14px,2.5vw,22px);width:auto;display:block;filter:brightness(0) invert(1)}
@@ -48,7 +48,7 @@ body.navy-mode #logo img{filter:brightness(0) invert(1)}
 /* Intro Screen */
 #intro-screen{position:fixed;top:0;left:0;width:100%;height:100%;display:flex;align-items:center;justify-content:center;z-index:100;background:#000;opacity:1;transition:opacity 0.8s ease;pointer-events:auto;cursor:pointer}
 #intro-screen.hidden{opacity:0;pointer-events:none}
-#intro-title{position:absolute;font-size:clamp(28px,8vw,56px);font-weight:300;letter-spacing:0.05em;text-align:center;opacity:0;transition:opacity 2s ease;pointer-events:none}
+#intro-title{position:absolute;font-size:clamp(28px,8vw,56px);font-weight:300;letter-spacing:0em;text-align:center;opacity:0;transition:opacity 2s ease;pointer-events:none}
 #intro-title.show{opacity:1;transition:opacity 3s ease}
 #intro-logo{position:absolute;margin-top:clamp(100px,20vw,160px);opacity:0;transition:opacity 2s ease;pointer-events:none}
 #intro-logo.show{opacity:1;transition:opacity 3s ease}
@@ -58,7 +58,7 @@ body.navy-mode #logo img{filter:brightness(0) invert(1)}
 #intro-touch-hint.hide{animation:slideDown 0.8s ease-in forwards}
 @keyframes slideUp{from{transform:translateX(-50%) translateY(40px);opacity:0}to{transform:translateX(-50%) translateY(0);opacity:0.6}}
 @keyframes slideDown{from{transform:translateX(-50%) translateY(0);opacity:0.6}to{transform:translateX(-50%) translateY(40px);opacity:0}}
-#intro-description{position:absolute;font-size:clamp(16px,4vw,32px);font-weight:300;text-align:center;line-height:1.8;opacity:0;transition:opacity 2s ease;max-width:85%;letter-spacing:0.02em;pointer-events:none}
+#intro-description{position:absolute;font-size:clamp(16px,4vw,32px);font-weight:300;text-align:center;line-height:1.8;opacity:0;transition:opacity 2s ease;max-width:85%;letter-spacing:0em;pointer-events:none}
 #intro-description.show{opacity:0.8;transition:opacity 1.5s ease}
 
 /* Bottom toolbar */
@@ -68,12 +68,12 @@ body.light-mode #settings-bar{background:rgba(245,245,245,0.9)}
 body.beige-mode #settings-bar{background:rgba(240,235,225,0.9)}
 body.navy-mode #settings-bar{background:rgba(10,22,40,0.9)}
 .bar-section{display:flex;align-items:center;gap:clamp(6px,1.5vw,8px)}
-.bar-label{font-size:clamp(10px,2vw,12px);font-weight:400;opacity:0.35;letter-spacing:0.08em;margin-right:2px}
+.bar-label{font-size:clamp(10px,2vw,12px);font-weight:400;opacity:0.35;letter-spacing:0em;margin-right:2px}
 .bar-divider{width:1px;height:20px;background:rgba(255,255,255,0.12);margin:0 clamp(4px,1vw,8px)}
 body.light-mode .bar-divider{background:rgba(0,0,0,0.12)}
 body.beige-mode .bar-divider{background:rgba(42,37,32,0.12)}
 body.navy-mode .bar-divider{background:rgba(200,214,229,0.12)}
-.settings-btn{padding:clamp(7px,1.8vw,10px) clamp(14px,3vw,20px);border:none;border-radius:16px;font-size:clamp(12px,2.5vw,14px);font-weight:400;cursor:pointer;background:rgba(255,255,255,0.08);color:#fff;transition:all 0.25s ease,background-color 1.5s ease,color 1.5s ease;letter-spacing:0.02em;white-space:nowrap}
+.settings-btn{padding:clamp(7px,1.8vw,10px) clamp(14px,3vw,20px);border:none;border-radius:16px;font-size:clamp(12px,2.5vw,14px);font-weight:400;cursor:pointer;background:rgba(255,255,255,0.08);color:#fff;transition:all 0.25s ease,background-color 1.5s ease,color 1.5s ease;letter-spacing:0em;white-space:nowrap}
 .settings-btn:hover{background:rgba(255,255,255,0.18)}
 .settings-btn.active{background:rgba(255,255,255,0.95);color:#000}
 body.light-mode .settings-btn{background:rgba(0,0,0,0.07);color:#000}
@@ -95,7 +95,7 @@ body.clock-ready #logo{opacity:0.2}
 
 /* Tip messages after start */
 #tip-screen{position:fixed;top:0;left:0;width:100%;height:100%;display:flex;align-items:center;justify-content:center;z-index:98;pointer-events:none}
-.tip-msg{position:absolute;font-size:clamp(20px,5vw,36px);font-weight:300;text-align:center;line-height:1.8;letter-spacing:0.02em;max-width:85%;opacity:0;transition:opacity 1.2s ease}
+.tip-msg{position:absolute;font-size:clamp(20px,5vw,36px);font-weight:300;text-align:center;line-height:1.8;letter-spacing:0em;max-width:85%;opacity:0;transition:opacity 1.2s ease}
 .tip-msg.show{opacity:0.7}
 .tip-msg.fade-out{opacity:0;transition:opacity 1.5s ease}
 </style>
