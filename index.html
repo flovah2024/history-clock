@@ -12,10 +12,19 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-html,body{width:100%;height:100%;overflow:hidden;background:#000;color:#fff;font-family:'Noto Serif KR','Georgia','Times New Roman',serif;-webkit-font-smoothing:antialiased;user-select:none;-webkit-user-select:none}
+html,body{width:100%;height:100%;overflow:hidden;background:#000;color:#fff;font-family:'Noto Serif KR','Georgia','Times New Roman',serif;-webkit-font-smoothing:antialiased;user-select:none;-webkit-user-select:none;transition:background-color 1.5s ease,color 1.5s ease}
 body{display:flex;flex-direction:column;justify-content:center;align-items:center;padding:env(safe-area-inset-top) 8vw env(safe-area-inset-bottom)}
 body.light-mode{background:#fff;color:#000}
 body.beige-mode{background:#f5f0e8;color:#2a2520}
+body.navy-mode{background:#0a1628;color:#c8d6e5}
+
+/* 초침 테마별 색상 */
+body.light-mode #second-hand{stroke:rgba(0,0,0,0.25)}
+body.light-mode #second-hand-container circle{fill:rgba(0,0,0,0.12)}
+body.beige-mode #second-hand{stroke:rgba(42,37,32,0.25)}
+body.beige-mode #second-hand-container circle{fill:rgba(42,37,32,0.12)}
+body.navy-mode #second-hand{stroke:rgba(200,214,229,0.25)}
+body.navy-mode #second-hand-container circle{fill:rgba(200,214,229,0.12)}
 #clock-container{perspective:800px;width:100%;max-width:600px;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;flex:1}
 .card{transform-style:preserve-3d;position:relative;width:100%}
 #time-text,#event-text{font-size:clamp(20px,5vw,40px);font-weight:300;letter-spacing:0.01em;line-height:1.4;opacity:0.9}
@@ -35,75 +44,113 @@ body.beige-mode{background:#f5f0e8;color:#2a2520}
 /* Intro Screen */
 #intro-screen{position:fixed;top:0;left:0;width:100%;height:100%;display:flex;align-items:center;justify-content:center;z-index:100;background:#000;opacity:1;transition:opacity 0.8s ease;pointer-events:auto;cursor:pointer}
 #intro-screen.hidden{opacity:0;pointer-events:none}
-#intro-title{position:absolute;font-size:clamp(28px,8vw,56px);font-weight:300;letter-spacing:0.05em;text-align:center;opacity:0;transition:opacity 0.7s ease;pointer-events:none}
-#intro-title.show{opacity:1}
-#intro-description{position:absolute;font-size:clamp(14px,3vw,20px);font-weight:300;text-align:center;line-height:1.8;opacity:0;transition:opacity 0.7s ease;max-width:85%;letter-spacing:0.02em;pointer-events:none}
-#intro-description.show{opacity:0.8}
-#intro-tap-hint{font-size:clamp(11px,2vw,13px);font-weight:300;letter-spacing:0.2em;text-transform:uppercase;opacity:0;transition:opacity 0.7s ease;position:fixed;bottom:clamp(28px,5vh,50px);left:50%;transform:translateX(-50%);white-space:nowrap}
-#intro-tap-hint.show{opacity:0.28}
+#intro-title{position:absolute;font-size:clamp(28px,8vw,56px);font-weight:300;letter-spacing:0.05em;text-align:center;opacity:0;transition:opacity 2s ease;pointer-events:none}
+#intro-title.show{opacity:1;transition:opacity 3s ease}
+#intro-description{position:absolute;font-size:clamp(16px,4vw,32px);font-weight:300;text-align:center;line-height:1.8;opacity:0;transition:opacity 2s ease;max-width:85%;letter-spacing:0.02em;pointer-events:none}
+#intro-description.show{opacity:0.8;transition:opacity 1.5s ease}
 
 /* Settings Overlay */
-#settings-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);display:none;align-items:center;justify-content:center;z-index:99;opacity:0;transition:opacity 0.3s ease}
+#settings-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);display:none;align-items:center;justify-content:center;z-index:99;opacity:0;transition:opacity 0.5s ease}
 #settings-overlay.show{display:flex;opacity:1}
-#settings-modal{background:#1a1a1a;border-radius:16px;padding:clamp(24px,6vw,40px);max-width:90%;max-height:80vh;overflow-y:auto;box-shadow:0 10px 40px rgba(0,0,0,0.5)}
+#settings-modal{background:#1a1a1a;border-radius:16px;padding:clamp(20px,4vw,28px) clamp(20px,4vw,32px);max-height:80vh;overflow-y:auto;box-shadow:0 10px 40px rgba(0,0,0,0.5);transition:background-color 1.5s ease,color 1.5s ease;text-align:center;display:flex;flex-direction:column;align-items:center}
 body.light-mode #settings-modal{background:#f5f5f5;color:#000}
 body.beige-mode #settings-modal{background:#ede8df;color:#2a2520}
-#settings-modal h3{font-size:clamp(14px,3vw,16px);font-weight:400;margin-bottom:1em;margin-top:1.5em;opacity:0.7;letter-spacing:0.05em}
+body.navy-mode #settings-modal{background:#0f1d33;color:#c8d6e5}
+#settings-modal h3{font-size:clamp(11px,2.2vw,13px);font-weight:400;margin-bottom:0.5em;margin-top:1em;opacity:0.4;letter-spacing:0.1em;text-transform:uppercase}
 #settings-modal h3:first-child{margin-top:0}
-.settings-group{display:flex;flex-wrap:wrap;gap:clamp(8px,2vw,12px);margin-bottom:1.5em}
-.settings-btn{padding:clamp(10px,2.5vw,14px) clamp(16px,4vw,24px);border:none;border-radius:20px;font-size:clamp(13px,2.5vw,15px);font-weight:300;cursor:pointer;background:rgba(255,255,255,0.1);color:#fff;transition:all 0.2s ease;letter-spacing:0.02em;white-space:nowrap}
+.settings-group{display:flex;flex-wrap:wrap;gap:clamp(8px,2vw,10px);margin-bottom:0.6em;justify-content:center}
+.settings-btn{padding:clamp(10px,2.5vw,14px) clamp(20px,4.5vw,28px);border:none;border-radius:22px;font-size:clamp(14px,3vw,17px);font-weight:400;cursor:pointer;background:rgba(255,255,255,0.1);color:#fff;transition:all 0.3s ease,background-color 1.5s ease,color 1.5s ease;letter-spacing:0.02em;white-space:nowrap}
 .settings-btn:hover{background:rgba(255,255,255,0.2)}
 .settings-btn.active{background:#fff;color:#000}
 body.light-mode .settings-btn{background:rgba(0,0,0,0.1);color:#000}
 body.light-mode .settings-btn.active{background:#000;color:#fff}
 body.beige-mode .settings-btn{background:rgba(42,37,32,0.1);color:#2a2520}
 body.beige-mode .settings-btn.active{background:#8b6f47;color:#fff}
-#start-btn{width:100%;padding:clamp(12px,3vw,16px);border:none;border-radius:24px;background:#fff;color:#000;font-size:clamp(14px,3vw,16px);font-weight:400;cursor:pointer;margin-top:1.5em;transition:all 0.2s ease;letter-spacing:0.02em}
-#start-btn:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,0.3)}
+body.navy-mode .settings-btn{background:rgba(200,214,229,0.1);color:#c8d6e5}
+body.navy-mode .settings-btn.active{background:#4a7cc9;color:#fff}
+#start-btn{width:auto;padding:clamp(10px,2.5vw,14px) clamp(32px,8vw,52px);border:none;border-radius:22px;background:#fff;color:#000;font-size:clamp(14px,3vw,17px);font-weight:400;cursor:pointer;margin-top:1em;align-self:center;letter-spacing:0.05em;opacity:0;transform:translateY(10px);transition:opacity 1.4s ease,transform 1.4s ease,box-shadow 0.3s ease,background-color 1.5s ease,color 1.5s ease;pointer-events:none}
+#start-btn.visible{opacity:1;transform:translateY(0);pointer-events:auto}
+#start-btn:hover{box-shadow:0 4px 20px rgba(255,255,255,0.15)}
 body.light-mode #start-btn{background:#000;color:#fff}
 body.beige-mode #start-btn{background:#8b6f47;color:#fff}
+body.navy-mode #start-btn{background:#4a7cc9;color:#fff}
 
-/* Animation for settings fade in */
+/* Onboarding: no box, transparent, centered */
+.onboarding{background:transparent!important;box-shadow:none!important;display:flex;flex-direction:column;align-items:center}
+.onboarding .settings-section-hand{display:none}
+.onboarding #label-theme{display:none}
+body.light-mode .onboarding{background:transparent!important}
+body.beige-mode .onboarding{background:transparent!important}
+
+/* Onboarding overlay: no dim background */
+#settings-overlay.onboarding-overlay{background:transparent}
+
+/* Onboarding message */
+#onboarding-msg{display:none;font-size:clamp(20px,5vw,36px);font-weight:300;text-align:center;margin-bottom:2em;letter-spacing:0.02em;line-height:1.6;opacity:0;transition:opacity 1.2s ease}
+.onboarding #onboarding-msg{display:block}
+#onboarding-msg.show{opacity:0.85}
+
+/* Onboarding: buttons hidden initially, fade in individually */
+.onboarding .settings-btn{opacity:0;transform:translateY(8px);transition:opacity 0.8s ease,transform 0.8s ease,background 0.3s ease,color 0.3s ease}
+.onboarding .settings-btn.reveal{opacity:1;transform:translateY(0)}
+
+/* Animation for settings fade in (normal mode) */
 @keyframes settingsFadeIn{from{opacity:0;transform:scale(0.95)}to{opacity:1;transform:scale(1)}}
-#settings-modal{animation:settingsFadeIn 0.3s ease}
+#settings-modal:not(.onboarding){animation:settingsFadeIn 0.3s ease}
+
+/* Clock fade in — staggered: second hand first, then text */
+#clock-container,#second-hand-container,#second-number,#logo{opacity:0}
+#second-hand-container,#second-number{transition:opacity 2.5s ease}
+#clock-container{transition:opacity 2s ease 1.2s}
+#logo{transition:opacity 2s ease 2s}
+body.clock-ready #second-hand-container{opacity:1}
+body.clock-ready #second-number{opacity:1}
+body.clock-ready #clock-container{opacity:1}
+body.clock-ready #logo{opacity:0.2}
+
+/* Tip messages after start */
+#tip-screen{position:fixed;top:0;left:0;width:100%;height:100%;display:flex;align-items:center;justify-content:center;z-index:98;pointer-events:none}
+.tip-msg{position:absolute;font-size:clamp(20px,5vw,36px);font-weight:300;text-align:center;line-height:1.8;letter-spacing:0.02em;max-width:85%;opacity:0;transition:opacity 1.2s ease}
+.tip-msg.show{opacity:0.7}
+.tip-msg.fade-out{opacity:0;transition:opacity 1.5s ease}
 </style>
 </head>
 <body>
 <div id="intro-screen">
 <div id="intro-title">History Clock</div>
 <div id="intro-description">히스토리 시계는 인류의 주요한 순간을<br>매 시간 보여드립니다.<br>지난 시간을, 읽어드리겠습니다.</div>
-<div id="intro-tap-hint">tap to continue</div>
 </div>
 
 <div id="settings-overlay">
 <div id="settings-modal">
-<h3 id="label-theme">Theme</h3>
-<div class="settings-group">
-<button class="settings-btn active" data-theme="dark">다크모드</button>
-<button class="settings-btn" data-theme="light">라이트모드</button>
-<button class="settings-btn" data-theme="beige">베이지모드</button>
+<p id="onboarding-msg">먼저, 테마를 골라주세요</p>
+<h3 id="label-theme">테마</h3>
+<div class="settings-group" id="theme-group">
+<button class="settings-btn" data-theme="dark">다크</button>
+<button class="settings-btn" data-theme="light">라이트</button>
+<button class="settings-btn" data-theme="beige">베이지</button>
+<button class="settings-btn" data-theme="navy">네이비</button>
 </div>
-
-<h3 id="label-lang">Language</h3>
+<div class="settings-section-hand">
+<h3 id="label-hand">초침</h3>
 <div class="settings-group">
-<button class="settings-btn active" data-lang="ko">국문</button>
-<button class="settings-btn" data-lang="en">English</button>
-</div>
-
-<h3 id="label-hand">Second Hand</h3>
-<div class="settings-group">
-<button class="settings-btn" data-hand="off" id="hand-off-btn">OFF</button>
+<button class="settings-btn" data-hand="off" id="hand-off-btn">끄기</button>
 <button class="settings-btn active" data-hand="needle" id="hand-needle-btn">바늘</button>
 <button class="settings-btn" data-hand="number" id="hand-number-btn">숫자</button>
 </div>
-
+</div>
 <button id="start-btn">시작</button>
 </div>
 </div>
 
+<div id="tip-screen">
+<div class="tip-msg" id="tip-1">화면을 터치하면<br>언제든 테마를 변경할 수 있습니다</div>
+<div class="tip-msg" id="tip-2">히스토리 클락은<br>가로 모드에 최적화 되어 있습니다</div>
+</div>
+
 <svg id="second-hand-container" viewBox="0 0 400 400">
-<line id="second-hand" x1="200" y1="200" x2="200" y2="30" stroke="rgba(255,255,255,0.3)" stroke-width="1.2" stroke-linecap="round"/>
-<circle cx="200" cy="200" r="3" fill="rgba(255,255,255,0.15)"/>
+<line id="second-hand" x1="200" y1="200" x2="200" y2="30" stroke="rgba(255,255,255,0.3)" stroke-width="1.2" stroke-linecap="round" style="transition:stroke 1.5s ease"/>
+<circle cx="200" cy="200" r="3" fill="rgba(255,255,255,0.15)" style="transition:fill 1.5s ease"/>
 </svg>
 <div id="second-number">00</div>
 <div id="clock-container"><div class="card">
@@ -231,7 +278,7 @@ const E={
 "09:30":{"t":"세계 최초의 심장 박동기가\n이식되었습니다","d":"1958년 10월 8일"},
 "09:35":{"t":"보이저 2호가\n천왕성에 도달하였습니다","d":"1986년 1월 24일"},
 "09:40":{"t":"루트비히 판 베토벤의\n합창 교향곡이 초연되었습니다","d":"1824년 5월 7일"},
-"09:45":{"t":"세월호가 진도 앞바다에서\n침몰하기 시작하였습니다","d":"2014년 4월 16일"},
+
 "09:50":{"t":"제네바 협약이 체결되어\n전시 인권 보호가 시작되었습니다","d":"1949년 8월 12일"},
 "09:55":{"t":"최초의 여객 증기 기관차가\n영국에서 운행을 시작하였습니다","d":"1825년 9월 27일"},
 "10:00":{"t":"대한민국 정부가\n수립되었습니다","d":"1948년 8월 15일"},
@@ -251,6 +298,8 @@ const E={
 "11:10":{"t":"여성 참정권 수정안이\n미국에서 비준되었습니다","d":"1920년 8월 18일"},
 "11:15":{"t":"세계 최초의 현미경이\n발명되었습니다","d":"1590년경"},
 "11:20":{"t":"코코 샤넬이 패션 혁명을\n일으켰습니다","d":"1920년대"},
+"11:21":{"t":"헌법재판소가 박근혜 대통령의\n파면을 선고하였습니다","d":"2017년 3월 10일"},
+"11:22":{"t":"헌법재판소가 윤석열 대통령의\n파면을 선고하였습니다","d":"2025년 4월 4일"},
 "11:25":{"t":"최초의 수혈이\n성공적으로 이루어졌습니다","d":"1818년"},
 "11:30":{"t":"6.25 전쟁 휴전 협정이\n체결되었습니다","d":"1953년 7월 27일"},
 "11:35":{"t":"팀 버너스리가\n월드와이드웹을 발명하였습니다","d":"1989년 3월 12일"},
@@ -263,7 +312,7 @@ const E={
 "12:10":{"t":"세계 최초의 동물원이\n일반에 공개되었습니다","d":"1828년 4월 27일"},
 "12:15":{"t":"스티브 잡스가 매킨토시를\n세상에 공개하였습니다","d":"1984년 1월 24일"},
 "12:20":{"t":"세계 최초의 자동판매기 특허가\n등록되었습니다","d":"1886년"},
-"12:25":{"t":"대한민국 헌법재판소가\n역사적 결정을 내렸습니다","d":"2017년 3월 10일"},
+
 "12:30":{"t":"존 F. 케네디 대통령이\n달라스에서 저격당하였습니다","d":"1963년 11월 22일"},
 "12:35":{"t":"구텐베르크가\n인쇄 혁명을 일으켰습니다","d":"1440년경"},
 "12:40":{"t":"세계 최초의 수족관이\n런던에 개관하였습니다","d":"1853년"},
@@ -408,59 +457,16 @@ const E={
 // Settings state
 let settings={
 theme:'dark',
-lang:'ko',
 secondHand:'needle',
 hasSeenIntro:false
 };
 
-// Language labels
-const labels={
-ko:{
-theme:'Theme',
-themeDark:'다크모드',
-themeLight:'라이트모드',
-themeColor:'베이지모드',
-lang:'Language',
-ko:'국문',
-en:'English',
-hand:'Second Hand',
-handOff:'끄기',
-handNeedle:'바늘',
-handNumber:'숫자',
-start:'시작'
-},
-en:{
-theme:'Theme',
-themeDark:'Dark Mode',
-themeLight:'Light Mode',
-themeColor:'Beige Mode',
-lang:'Language',
-ko:'Korean',
-en:'English',
-hand:'Second Hand',
-handOff:'Off',
-handNeedle:'Needle',
-handNumber:'Number',
-start:'Start'
-}
-};
-
-function updateLabels(){
-const l=labels[settings.lang];
-document.getElementById('label-theme').textContent=l.theme;
-document.getElementById('label-lang').textContent=l.lang;
-document.getElementById('label-hand').textContent=l.hand;
-document.getElementById('hand-off-btn').textContent=l.handOff;
-document.getElementById('hand-needle-btn').textContent=l.handNeedle;
-document.getElementById('hand-number-btn').textContent=l.handNumber;
-document.getElementById('start-btn').textContent=l.start;
-}
-
 function applyTheme(){
 const body=document.body;
-body.classList.remove('dark-mode','light-mode','beige-mode');
+body.classList.remove('dark-mode','light-mode','beige-mode','navy-mode');
 if(settings.theme==='light'){body.classList.add('light-mode');}
 else if(settings.theme==='beige'){body.classList.add('beige-mode');}
+else if(settings.theme==='navy'){body.classList.add('navy-mode');}
 else{body.classList.add('dark-mode');}
 }
 
@@ -471,9 +477,26 @@ svg.style.display=settings.secondHand==='needle'?'block':'none';
 num.style.display=settings.secondHand==='number'?'block':'none';
 }
 
-function showSettings(){
+function showSettings(onboarding){
 const overlay=document.getElementById('settings-overlay');
+const modal=document.getElementById('settings-modal');
+if(onboarding){
+modal.classList.add('onboarding');
+overlay.classList.add('onboarding-overlay');
 overlay.classList.add('show');
+// 1) 메시지 먼저 등장
+const msg=document.getElementById('onboarding-msg');
+setTimeout(()=>{msg.classList.add('show');},400);
+// 2) 버튼 순차 등장
+const btns=modal.querySelectorAll('[data-theme]');
+btns.forEach((btn,i)=>{
+setTimeout(()=>{btn.classList.add('reveal');},1200+i*400);
+});
+}else{
+modal.classList.remove('onboarding');
+overlay.classList.remove('onboarding-overlay');
+overlay.classList.add('show');
+}
 }
 
 function hideSettings(){
@@ -487,58 +510,59 @@ intro.classList.add('hidden');
 setTimeout(()=>{
 intro.style.display='none';
 settings.hasSeenIntro=true;
-showSettings();
+showSettings(true);
 },800);
 }
 
-// Intro sequence — 단계별 클릭
+// Intro sequence — 터치 또는 8초 자동 진행
 let _introStep=0;
 let _introLock=false;
+let _autoTimer=null;
 function startIntro(){
 const title=document.getElementById('intro-title');
 const desc=document.getElementById('intro-description');
-const hint=document.getElementById('intro-tap-hint');
 const intro=document.getElementById('intro-screen');
-// Step 1: 타이틀 페이드인
-setTimeout(()=>{title.classList.add('show');},300);
-setTimeout(()=>{hint.classList.add('show');},1200);
-function onTap(e){
+
+function goNext(){
 if(_introLock)return;
 _introLock=true;
+if(_autoTimer){clearTimeout(_autoTimer);_autoTimer=null;}
 _introStep++;
 if(_introStep===1){
-// 타이틀 → 설명으로 전환
-hint.classList.remove('show');
 title.classList.remove('show');
-setTimeout(()=>{desc.classList.add('show');},500);
-setTimeout(()=>{hint.classList.add('show');_introLock=false;},1000);
+setTimeout(()=>{
+desc.classList.add('show');
+_introLock=false;
+_autoTimer=setTimeout(goNext,8000);
+},2200);
 }else if(_introStep===2){
-// 설명 → 설정화면
-hint.classList.remove('show');
 desc.classList.remove('show');
-setTimeout(()=>{hideIntro();_introLock=false;},400);
+setTimeout(()=>{hideIntro();_introLock=false;},2200);
 }
 }
-intro.addEventListener('click',onTap);
-intro.addEventListener('touchend',(e)=>{e.preventDefault();onTap(e);},{passive:false});
+
+// 타이틀 3초에 걸쳐 서서히 등장
+setTimeout(()=>{title.classList.add('show');},500);
+// 8초 후 자동 진행
+_autoTimer=setTimeout(goNext,8000);
+
+intro.addEventListener('click',goNext);
+intro.addEventListener('touchend',(e)=>{e.preventDefault();goNext();},{passive:false});
 }
 
 // Settings buttons
+let _themeSelected=false;
 document.querySelectorAll('[data-theme]').forEach(btn=>{
 btn.addEventListener('click',()=>{
 document.querySelectorAll('[data-theme]').forEach(b=>b.classList.remove('active'));
 btn.classList.add('active');
 settings.theme=btn.dataset.theme;
 applyTheme();
-});
-});
-
-document.querySelectorAll('[data-lang]').forEach(btn=>{
-btn.addEventListener('click',()=>{
-document.querySelectorAll('[data-lang]').forEach(b=>b.classList.remove('active'));
-btn.classList.add('active');
-settings.lang=btn.dataset.lang;
-updateLabels();
+// 온보딩 중 테마 선택 시 시작 버튼 등장
+if(!_themeSelected){
+_themeSelected=true;
+setTimeout(()=>{document.getElementById('start-btn').classList.add('visible');},600);
+}
 });
 });
 
@@ -553,11 +577,30 @@ updateSecondHandVisibility();
 
 document.getElementById('start-btn').addEventListener('click',()=>{
 hideSettings();
+if(!document.body.classList.contains('clock-ready')){
+const tip1=document.getElementById('tip-1');
+const tip2=document.getElementById('tip-2');
+// 1) 첫 번째 팁 등장
+setTimeout(()=>{tip1.classList.add('show');},500);
+// 2초 머문 후 사라짐
+setTimeout(()=>{tip1.classList.add('fade-out');},2800);
+// 2) 두 번째 팁 등장
+setTimeout(()=>{tip2.classList.add('show');},4500);
+// 2초 머문 후 사라짐
+setTimeout(()=>{tip2.classList.add('fade-out');},6800);
+// 3) 시계 시작
+setTimeout(()=>{
+document.getElementById('tip-screen').style.display='none';
+document.body.classList.add('clock-ready');
+},8500);
+}
 });
 
 // Settings overlay click handler (close on background click)
 document.getElementById('settings-overlay').addEventListener('click',(e)=>{
 if(e.target.id==='settings-overlay'){
+// 온보딩 중에는 배경 클릭으로 닫지 않음
+if(document.getElementById('settings-modal').classList.contains('onboarding'))return;
 hideSettings();
 }
 });
@@ -575,20 +618,42 @@ function animateSecondHand(){const now=new Date();const s=now.getSeconds();const
 animateSecondHand();
 let lastKey='';
 function isLand(){return window.innerWidth>window.innerHeight}
-function update(){const now=new Date();const h=now.getHours(),m=now.getMinutes();const k=pad(h)+':'+pad(m);if(k===lastKey)return;lastKey=k;const timeStr=getTimeStr(h,m);const ev=findEvent(h,m);const timeEl=document.getElementById('time-text');const eventEl=document.getElementById('event-text');const dateEl=document.getElementById('date-text');const container=document.querySelector('.card');const nl=isLand()?' ':'<br>';container.classList.remove('flip-in');container.classList.add('flip-out');setTimeout(()=>{timeEl.textContent=timeStr;if(ev){eventEl.innerHTML=ev.t.replace(/\n/g,nl);dateEl.textContent='('+ev.d+')';}else{const next=findNext(h,m);if(next.mins<=60){eventEl.innerHTML='앞으로 '+next.mins+'분 후'+nl+'하나의 사건이 발생합니다';}else{const hrs=Math.floor(next.mins/60);const mins=next.mins%60;eventEl.innerHTML='앞으로 '+hrs+'시간 '+mins+'분 후'+nl+'하나의 사건이 발생합니다';}dateEl.textContent='';}container.classList.remove('flip-out');container.classList.add('flip-in');},350);}
+function update(){
+const now=new Date();const h=now.getHours(),m=now.getMinutes();
+const k=pad(h)+':'+pad(m);if(k===lastKey)return;lastKey=k;
+const timeStr=getTimeStr(h,m);const ev=findEvent(h,m);
+const timeEl=document.getElementById('time-text');
+const eventEl=document.getElementById('event-text');
+const dateEl=document.getElementById('date-text');
+const nl=isLand()?' ':'<br>';
+const els=[timeEl,eventEl,dateEl];
+const stagger=300;
+// 순차적 플립 아웃
+els.forEach((el,i)=>{
+setTimeout(()=>{el.classList.remove('flip-in');el.classList.add('flip-out');},i*stagger);
+});
+// 모든 요소가 사라진 후 내용 교체 & 순차적 플립 인
+setTimeout(()=>{
+timeEl.textContent=timeStr;
+if(ev){eventEl.innerHTML=ev.t.replace(/\n/g,nl);dateEl.textContent=ev.d;}
+else{const next=findNext(h,m);if(next.mins<=60){eventEl.innerHTML='앞으로 '+next.mins+'분 후'+nl+'하나의 사건이 발생합니다';}else{const hrs=Math.floor(next.mins/60);const mins=next.mins%60;eventEl.innerHTML='앞으로 '+hrs+'시간 '+mins+'분 후'+nl+'하나의 사건이 발생합니다';}dateEl.textContent='';}
+els.forEach((el,i)=>{
+setTimeout(()=>{el.classList.remove('flip-out');el.classList.add('flip-in');},i*stagger);
+});
+},(els.length-1)*stagger+350);
+}
 requestWakeLock();update();setInterval(update,1000);
 window.addEventListener('resize',()=>{lastKey='';update()});
 
 // Clock interaction (open settings on click)
 document.getElementById('clock-container').addEventListener('click',()=>{
 if(settings.hasSeenIntro){
-showSettings();
+showSettings(false);
 }
 });
 
 // Apply initial settings and start intro
 applyTheme();
-updateLabels();
 updateSecondHandVisibility();
 startIntro();
 
