@@ -29,7 +29,7 @@ body.navy-mode #second-hand-container circle{fill:rgba(200,214,229,0.12)}
 .card{transform-style:preserve-3d;position:relative;width:100%}
 #time-text,#event-text{font-size:clamp(30px,7.5vw,60px);font-weight:300;letter-spacing:0em;line-height:1.4;opacity:0.9}
 #time-text{margin-bottom:0.3em}
-#date-text{font-size:clamp(19.5px,3.75vw,27px);font-weight:300;letter-spacing:0em;opacity:0.35;margin-top:1em}
+#date-text{font-size:clamp(19.5px,3.75vw,27px);font-weight:300;letter-spacing:0em;opacity:0.35;margin-top:1em;text-align:right;word-break:keep-all}
 #second-hand-container{position:fixed;top:50%;left:50%;width:min(85vw,85vh);height:min(85vw,85vh);transform:translate(-50%,-50%);pointer-events:none;z-index:0}
 #second-number{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);font-size:clamp(100px,25vw,200px);font-weight:100;opacity:0.055;pointer-events:none;z-index:0;letter-spacing:0em;display:none;line-height:1;font-variant-numeric:tabular-nums}
 #clock-container{position:relative;z-index:1}
@@ -38,8 +38,8 @@ body.navy-mode #second-hand-container circle{fill:rgba(200,214,229,0.12)}
 body.light-mode #logo img{filter:brightness(0)}
 body.beige-mode #logo img{filter:brightness(0) sepia(0.4)}
 body.navy-mode #logo img{filter:brightness(0) invert(1)}
-@media (orientation:landscape) and (max-height:700px){#time-text,#event-text{font-size:clamp(40px,7vh,56px);line-height:1.2}#date-text{font-size:clamp(17px,2.5vh,20px);margin-top:0.3em;opacity:0.5}#time-text{margin-bottom:0.1em}body{padding:env(safe-area-inset-top) 4vw env(safe-area-inset-bottom)}#clock-container{max-width:95%}.settings-btn{font-size:clamp(13px,2.3vh,15px);padding:clamp(8px,1.7vh,11px) clamp(14px,2.6vw,20px)}}
-@media (orientation:landscape) and (min-height:701px){#time-text,#event-text{font-size:clamp(36px,4.5vw,60px);line-height:1.3}#date-text{font-size:clamp(15px,2.2vw,21px);margin-top:0.4em;opacity:0.5}body{padding:env(safe-area-inset-top) 6vw env(safe-area-inset-bottom)}#clock-container{max-width:800px}.settings-btn{font-size:clamp(14px,2.2vw,16px);padding:clamp(9px,1.8vh,12px) clamp(17px,2.8vw,23px)}.bar-label{font-size:clamp(12px,1.8vw,14px)}}
+@media (orientation:landscape) and (max-height:700px){#time-text,#event-text{font-size:clamp(40px,7vh,56px);line-height:1.2}#date-text{font-size:clamp(17px,2.5vh,20px);margin-top:0.3em;opacity:0.5;text-align:right;word-break:keep-all}#time-text{margin-bottom:0.1em}body{padding:env(safe-area-inset-top) 4vw env(safe-area-inset-bottom)}#clock-container{max-width:95%}.settings-btn{font-size:clamp(13px,2.3vh,15px);padding:clamp(8px,1.7vh,11px) clamp(14px,2.6vw,20px)}}
+@media (orientation:landscape) and (min-height:701px){#time-text,#event-text{font-size:clamp(36px,4.5vw,60px);line-height:1.3}#date-text{font-size:clamp(15px,2.2vw,21px);margin-top:0.4em;opacity:0.5;text-align:right;word-break:keep-all}body{padding:env(safe-area-inset-top) 6vw env(safe-area-inset-bottom)}#clock-container{max-width:800px}.settings-btn{font-size:clamp(14px,2.2vw,16px);padding:clamp(9px,1.8vh,12px) clamp(17px,2.8vw,23px)}.bar-label{font-size:clamp(12px,1.8vw,14px)}}
 @keyframes flipOut{0%{transform:rotateX(0deg);opacity:1}50%{transform:rotateX(-90deg);opacity:0}100%{transform:rotateX(-90deg);opacity:0}}
 @keyframes flipIn{0%{transform:rotateX(90deg);opacity:0}50%{transform:rotateX(90deg);opacity:0}100%{transform:rotateX(0deg);opacity:1}}
 .flip-out{animation:flipOut 0.7s ease-in forwards;transform-origin:bottom center}
@@ -62,7 +62,7 @@ body.navy-mode #logo img{filter:brightness(0) invert(1)}
 #intro-description.show{opacity:0.8;transition:opacity 1.5s ease}
 
 /* Skip button */
-#skip-btn{position:fixed;bottom:clamp(20px,4vw,30px);right:clamp(16px,3vw,24px);padding:clamp(10px,2vw,14px) clamp(18px,3.5vw,26px);background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);border-radius:20px;color:#fff;font-size:clamp(12px,2.5vw,14px);font-weight:400;font-family:'Noto Sans KR','Georgia',sans-serif;cursor:pointer;z-index:101;opacity:0;transition:all 0.3s ease;pointer-events:none;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+#skip-btn{position:fixed;bottom:clamp(20px,4vw,30px);right:clamp(16px,3vw,24px);padding:clamp(10px,2vw,14px) clamp(18px,3.5vw,26px);background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);border-radius:20px;color:#fff;font-size:clamp(12px,2.5vw,14px);font-weight:400;font-family:'Noto Sans KR','Georgia',sans-serif;cursor:pointer;z-index:102;opacity:0;transition:all 0.3s ease;pointer-events:none;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);user-select:none;-webkit-user-select:none}
 #skip-btn:hover{background:rgba(255,255,255,0.25);border-color:rgba(255,255,255,0.5)}
 #skip-btn.show{opacity:0.8;pointer-events:auto}
 
@@ -537,7 +537,7 @@ _autoTimer=setTimeout(goNext,8000);
 function hideHint(){touchHint.classList.add('hide');}
 intro.addEventListener('click',()=>{hideHint();goNext();});
 intro.addEventListener('touchend',(e)=>{e.preventDefault();hideHint();goNext();},{passive:false});
-skipBtn.addEventListener('click',()=>{clearTimeout(_autoTimer);hideHint();goNext();});
+skipBtn.addEventListener('click',(e)=>{e.stopPropagation();clearTimeout(_autoTimer);hideHint();goNext();});
 }
 
 // Settings buttons
@@ -562,6 +562,8 @@ updateSecondHandVisibility();
 function pad(n){return String(n).padStart(2,'0')}
 const keys=Object.keys(E).sort();
 function getTimeStr(h,m){const ap=h<12?'오전':'오후';const h12=h===0?12:h>12?h-12:h;return ap+' '+h12+'시 '+m+'분,';}
+function numToKor(n){const nums=['','일','이','삼','사','오','육','칠','팔','구'];if(n<10)return nums[n];const tens=Math.floor(n/10);const ones=n%10;return(tens>0?nums[tens]+'십':'')+(ones?nums[ones]:'');}
+function hrToKor(h){const hrs=['','한','두','세','네','다섯','여섯','일곱','여덟','아홉'];return h<10?hrs[h]:numToKor(h);}
 function findEvent(h,m){const k=pad(h)+':'+pad(m);if(E[k])return{time:k,...E[k]};return null;}
 function findNext(h,m){const now=h*60+m;for(const k of keys){const[hh,mm]=k.split(':').map(Number);const t=hh*60+mm;if(t>now)return{mins:t-now};}const[hh,mm]=keys[0].split(':').map(Number);return{mins:(24*60-now)+(hh*60+mm)};}
 let wakeLock=null;
@@ -590,7 +592,7 @@ setTimeout(()=>{el.classList.remove('flip-in');el.classList.add('flip-out');},i*
 setTimeout(()=>{
 timeEl.textContent=timeStr;
 if(ev){eventEl.innerHTML=ev.t.replace(/\n/g,nl);dateEl.textContent=ev.d;}
-else{const next=findNext(h,m);if(next.mins<=60){eventEl.innerHTML='앞으로 '+next.mins+'분 후'+nl+'하나의 사건이 발생합니다';}else{const hrs=Math.floor(next.mins/60);const mins=next.mins%60;eventEl.innerHTML='앞으로 '+hrs+'시간 '+mins+'분 후'+nl+'하나의 사건이 발생합니다';}dateEl.textContent='';}
+else{const next=findNext(h,m);if(next.mins<=60){eventEl.innerHTML='앞으로 '+numToKor(next.mins)+'분 후 하나의 사건이 발생합니다';}else{const hrs=Math.floor(next.mins/60);const mins=next.mins%60;eventEl.innerHTML='앞으로 '+hrToKor(hrs)+'시간 '+(mins?numToKor(mins)+'분':'')+'후 하나의 사건이 발생합니다';}dateEl.textContent='';}
 els.forEach((el,i)=>{
 setTimeout(()=>{el.classList.remove('flip-out');el.classList.add('flip-in');},i*stagger);
 });
