@@ -2,293 +2,313 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black">
-<meta name="theme-color" content="#000000">
-<title>History Clock</title>
-<style>
-*{margin:0;padding:0;box-sizing:border-box}<!DOCTYPE html>
-<html lang="ko">
-<head>
-<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <title>History Clock</title>
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black">
-<meta name="theme-color" content="#000000">
-<link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiSGlzdG9yeSBDbG9jayIsInNob3J0X25hbWUiOiJIQ2xvY2siLCJzdGFydF91cmwiOiIuIiwiZGlzcGxheSI6InN0YW5kYWxvbmUiLCJiYWNrZ3JvdW5kX2NvbG9yIjoiIzAwMDAwMCIsInRoZW1lX2NvbG9yIjoiIzAwMDAwMCJ9">
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-html,body{width:100%;height:100%;overflow:hidden;background:#000;color:#fff;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Helvetica Neue',sans-serif;-webkit-font-smoothing:antialiased}
-body{display:flex;flex-direction:column;align-items:center;justify-content:center;user-select:none;-webkit-user-select:none;cursor:default}
-#clock-wrap{text-align:center;perspective:600px}
-#time-line{font-size:clamp(48px,12vw,120px);font-weight:200;letter-spacing:-0.02em;line-height:1.1;white-space:nowrap}
-#seconds{font-size:0.4em;opacity:0.35;vertical-align:baseline;margin-left:2px;font-weight:300}
-#event-wrap{margin-top:clamp(12px,3vh,32px);min-height:80px;text-align:center}
-#event-text{font-size:clamp(14px,2.8vw,22px);font-weight:300;line-height:1.6;letter-spacing:0.02em;opacity:0.85}
-#event-date{font-size:clamp(11px,1.8vw,15px);font-weight:300;opacity:0.4;margin-top:clamp(6px,1.2vh,14px)}
-#countdown-text{font-size:clamp(14px,2.8vw,22px);font-weight:300;line-height:1.6;opacity:0.5}
-#logo{position:fixed;bottom:clamp(16px,3vh,40px);left:50%;transform:translateX(-50%);font-size:clamp(10px,1.4vw,14px);font-weight:400;letter-spacing:0.35em;opacity:0.2;text-transform:uppercase;transition:opacity 0.5s ease}
-#logo.hidden{opacity:0}
-.flip-out{animation:flipOut 0.3s ease-in forwards}
-.flip-in{animation:flipIn 0.3s ease-out forwards}
-@keyframes flipOut{0%{transform:rotateX(0);opacity:1}100%{transform:rotateX(-90deg);opacity:0}}
-@keyframes flipIn{0%{transform:rotateX(90deg);opacity:0}100%{transform:rotateX(0);opacity:1}}
-@media(orientation:portrait){
-#time-line{font-size:clamp(54px,14vw,160px)}
-#event-text{font-size:clamp(16px,3.6vw,28px)}
-#event-date{font-size:clamp(12px,2.2vw,18px)}
-#countdown-text{font-size:clamp(16px,3.6vw,28px)}
-}
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #000;
+    color: #fff;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans KR', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    overflow: hidden;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+  #clock-container {
+    text-align: center;
+    perspective: 600px;
+  }
+  #time-display {
+    font-size: 4.5rem;
+    font-weight: 200;
+    letter-spacing: 0.02em;
+    line-height: 1.1;
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 0;
+  }
+  #time-main {
+    font-size: 4.5rem;
+    font-weight: 200;
+  }
+  #time-sec {
+    font-size: 1.8rem;
+    font-weight: 300;
+    opacity: 0.3;
+    margin-left: 0.15em;
+  }
+  #event-display {
+    min-height: 180px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  #event-time {
+    font-size: 1.6rem;
+    font-weight: 300;
+    opacity: 0.85;
+    margin-bottom: 0.8rem;
+  }
+  #event-text {
+    font-size: 1.15rem;
+    font-weight: 300;
+    line-height: 1.7;
+    opacity: 0.7;
+    max-width: 480px;
+    padding: 0 1rem;
+  }
+  #event-date {
+    font-size: 0.85rem;
+    font-weight: 300;
+    opacity: 0.35;
+    margin-top: 0.8rem;
+  }
+  .flip-out {
+    animation: flipOut 0.4s ease-in forwards;
+  }
+  .flip-in {
+    animation: flipIn 0.4s ease-out forwards;
+  }
+  @keyframes flipOut {
+    0% { transform: rotateX(0deg); opacity: 1; }
+    100% { transform: rotateX(-90deg); opacity: 0; }
+  }
+  @keyframes flipIn {
+    0% { transform: rotateX(90deg); opacity: 0; }
+    100% { transform: rotateX(0deg); opacity: 1; }
+  }
+  #logo {
+    position: fixed;
+    bottom: 2.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.85rem;
+    font-weight: 400;
+    letter-spacing: 0.45em;
+    opacity: 0.2;
+    transition: opacity 0.5s ease;
+    cursor: pointer;
+  }
+  #logo.hidden {
+    opacity: 0;
+  }
+  @media (orientation: portrait) {
+    #time-main { font-size: 6.75rem; }
+    #time-sec { font-size: 2.7rem; }
+    #event-time { font-size: 2.4rem; }
+    #event-text { font-size: 1.725rem; }
+    #event-date { font-size: 1.275rem; }
+    #logo { font-size: 1.275rem; }
+  }
 </style>
 </head>
 <body>
-<div id="clock-wrap">
-<div id="time-line"><span id="hm"></span><span id="seconds"></span></div>
-<div id="event-wrap">
-<div id="event-text"></div>
-<div id="event-date"></div>
-<div id="countdown-text"></div>
+<div id="clock-container">
+  <div id="time-display">
+    <span id="time-main"></span>
+    <span id="time-sec"></span>
+  </div>
+  <div id="event-display">
+    <div id="event-time"></div>
+    <div id="event-text"></div>
+    <div id="event-date"></div>
+  </div>
 </div>
-</div>
-<div id="logo">FLOVAH</div>
-<script>function(){
-var events = {
-"01:23": {t:"\uccb4\ub974\ub178\ube4c \uc6d0\uc790\ub825 \ubc1c\uc804\uc18c 4\ud638\uae30\uac00<br>\ud3ed\ubc1c\ud558\uc600\uc2b5\ub2c8\ub2e4",d:"1986\ub144 4\uc6d4 26\uc77c"},
-"02:46": {t:"\ud0c0\uc774\ud0c0\ub2c9\ud638\uac00 \ube59\uc0b0\uc5d0 \ucda9\ub3cc\ud558\uc5ec<br>\uce68\ubab0\ud558\uae30 \uc2dc\uc791\ud558\uc600\uc2b5\ub2c8\ub2e4",d:"1912\ub144 4\uc6d4 15\uc77c"},
-"03:00": {t:"\ub3c5\uc77c\uad70\uc774 \ud3f4\ub780\ub4dc\ub97c \uce68\uacf5\ud558\uba70<br>\uc81c2\ucc28 \uc138\uacc4\ub300\uc804\uc774 \uc2dc\uc791\ub418\uc5c8\uc2b5\ub2c8\ub2e4",d:"1939\ub144 9\uc6d4 1\uc77c"},
-"03:07": {t:"\ub300\ud55c\ubbfc\uad6d \ud5cc\ubc95\uc7ac\ud310\uc18c\uac00 \ubc15\uadfc\ud61c \ub300\ud1b5\ub839<br>\ud0c4\ud575 \uc2ec\ud310\uc744 \uc120\uace0\ud558\uc600\uc2b5\ub2c8\ub2e4",d:"2017\ub144 3\uc6d4 10\uc77c"},
-"04:17": {t:"5.18 \ubbfc\uc8fc\ud654\uc6b4\ub3d9 \ub2f9\uc2dc<br>\uacc4\uc5c4\uad70\uc774 \uad11\uc8fc\uc5d0 \ud22c\uc785\ub418\uc5c8\uc2b5\ub2c8\ub2e4",d:"1980\ub144 5\uc6d4 18\uc77c"},
-"04:30": {t:"\ub9c8\ud558\ud2b8\ub9c8 \uac04\ub514\uac00 \uc0c8\ubcbd \uae30\ub3c4\ub97c \uc704\ud574<br>\uc77c\uc5b4\ub09c \uc2dc\uac01\uc785\ub2c8\ub2e4",d:"1869\ub144~1948\ub144"},
-"05:12": {t:"\uc4f0\ucc28\uc6d0 \ub300\uc9c0\uc9c4\uc774 \ubc1c\uc0dd\ud558\uc5ec<br>7\ub9cc \uba85 \uc774\uc0c1\uc774 \uc0ac\ub9dd\ud558\uc600\uc2b5\ub2c8\ub2e4",d:"2008\ub144 5\uc6d4 12\uc77c"},
-"05:29": {t:"\uc5d0\ubca0\ub808\uc2a4\ud2b8 \uc0b0 \uc815\uc0c1\uc5d0<br>\uc778\ub958\uac00 \ucc98\uc74c \ub3c4\ub2ec\ud558\uc600\uc2b5\ub2c8\ub2e4",d:"1953\ub144 5\uc6d4 29\uc77c"},
-"06:00": {t:"\ub178\ub974\ub9dd\ub514 \uc0c1\ub959\uc791\uc804 D-Day\uac00<br>\uc2dc\uc791\ub418\uc5c8\uc2b5\ub2c8\ub2e4",d:"1944\ub144 6\uc6d4 6\uc77c"},
-"06:09": {t:"\ub300\ud55c\ubbfc\uad6d 2002 \uc6d4\ub4dc\ucef5 \uc774\ud0c8\ub9ac\uc544\uc804<br>\uc5f0\uc7a5 \uc804 \ubd89\uc740\uc545\ub9c8\uac00 \uae68\uc5b4\ub09c \uc2dc\uac01\uc785\ub2c8\ub2e4",d:"2002\ub144 6\uc6d4 18\uc77c"},
-"06:45": {t:"\ud55c\uad6d\uc804\uc7c1\uc774 \ubc1c\ubc1c\ud558\uc600\uc2b5\ub2c8\ub2e4<br>\ubd81\ud55c\uad70\uc774 38\ub3c4\uc120\uc744 \ub118\uc5c8\uc2b5\ub2c8\ub2e4",d:"1950\ub144 6\uc6d4 25\uc77c"},
-"07:40": {t:"\uccab \ubc88\uc9f8 \uc6b0\uc8fc\uc655\ubcf5\uc120 \uccc8\ub9b0\uc800\ud638\uac00<br>\ubc1c\uc0ac 73\ucd08 \ub9cc\uc5d0 \ud3ed\ubc1c\ud558\uc600\uc2b5\ub2c8\ub2e4",d:"1986\ub144 1\uc6d4 28\uc77c"},
-"08:00": {t:"\ub9c8\ud2f4 \ub8e8\ud130 \ud0b9 \ubaa9\uc0ac\uac00<br>\u2018\ub098\uc5d0\uac8c\ub294 \uafc8\uc774 \uc788\uc2b5\ub2c8\ub2e4\u2019 \uc5f0\uc124\uc744 \ud558\uc600\uc2b5\ub2c8\ub2e4",d:"1963\ub144 8\uc6d4 28\uc77c"},
-"08:15": {t:"\ud788\ub85c\uc2dc\ub9c8\uc5d0 \uc6d0\uc790\ud3ed\ud0c4\uc774<br>\ud22c\ud558\ub418\uc5c8\uc2b5\ub2c8\ub2e4",d:"1945\ub144 8\uc6d4 6\uc77c"},
-"08:46": {t:"9/11 \ud14c\ub7ec \u2013 \uccab \ubc88\uc9f8 \ube44\ud589\uae30\uac00<br>\uc138\uacc4\ubb34\uc5ed\uc13c\ud130 \ubd81\ucabd \ud0c0\uc6cc\uc5d0 \ucda9\ub3cc\ud558\uc600\uc2b5\ub2c8\ub2e4",d:"2001\ub144 9\uc6d4 11\uc77c"},
-"09:03": {t:"9/11 \ud14c\ub7ec \u2013 \ub450 \ubc88\uc9f8 \ube44\ud589\uae30\uac00<br>\ub0a8\ucabd \ud0c0\uc6cc\uc5d0 \ucda9\ub3cc\ud558\uc600\uc2b5\ub2c8\ub2e4",d:"2001\ub144 9\uc6d4 11\uc77c"},
-"09:08": {t:"\uc138\uc6d4\ud638\uac00 \uc9c4\ub3c4 \uc55e\ubc14\ub2e4\uc5d0\uc11c<br>\uce68\ubab0\ud558\uae30 \uc2dc\uc791\ud558\uc600\uc2b5\ub2c8\ub2e4",d:"2014\ub144 4\uc6d4 16\uc77c"},
-"09:28": {t:"9/11 \ud14c\ub7ec \u2013 \uc138 \ubc88\uc9f8 \ube44\ud589\uae30\uac00<br>\ud3a8\ud0c0\uace4\uc5d0 \ucda9\ub3cc\ud558\uc600\uc2b5\ub2c8\ub2e4",d:"2001\ub144 9\uc6d4 11\uc77c"},
-"09:56": {t:"9/11 \ud14c\ub7ec \u2013 \uc138\uacc4\ubb34\uc5ed\uc13c\ud130<br>\ub0a8\ucabd \ud0c0\uc6cc\uac00 \ubd95\uad34\ud558\uc600\uc2b5\ub2c8\ub2e4",d:"2001\ub144 9\uc6d4 11\uc77c"},
-"10:04": {t:"\ub300\ud55c\ubbfc\uad6d \uc784\uc2dc\uc815\ubd80 \uc218\ub9bd\uc774<br>\uc120\ud3ec\ub418\uc5c8\uc2b5\ub2c8\ub2e4",d:"1919\ub144 4\uc6d4 11\uc77c"},
-"10:28": {t:"9/11 \ud14c\ub7ec \u2013 \uc138\uacc4\ubb34\uc5ed\uc13c\ud130<br>\ubd81\ucabd \ud0c0\uc6cc\uac00 \ubd95\uad34\ud558\uc600\uc2b5\ub2c8\ub2e4",d:"2001\ub144 9\uc6d4 11\uc77c"},
-"11:00": {t:"\uc81c1\ucc28 \uc138\uacc4\ub300\uc804 \ud734\uc804 \ud611\uc815\uc774<br>\ubc1c\ud6a8\ub418\uc5c8\uc2b5\ub2c8\ub2e4",d:"1918\ub144 11\uc6d4 11\uc77c"},
-"11:02": {t:"\ub098\uac00\uc0ac\ud0a4\uc5d0 \ub450 \ubc88\uc9f8<br>\uc6d0\uc790\ud3ed\ud0c4\uc774 \ud22c\ud558\ub418\uc5c8\uc2b5\ub2c8\ub2e4",d:"1945\ub144 8\uc6d4 9\uc77c"},
-"11:38": {t:"BTS\uac00 UN \ucd1d\ud68c\uc5d0\uc11c<br>\uccad\ub144 \uc138\ub300\ub97c \ub300\ud45c\ud558\uc5ec \uc5f0\uc124\ud558\uc600\uc2b5\ub2c8\ub2e4",d:"2018\ub144 9\uc6d4 24\uc77c"},
-"12:00": {t:"\ub300\ud55c\ubbfc\uad6d \uad11\ubcf5\uc808 \uc815\uc624<br>\uc0ac\uc774\ub80c\uc774 \uc6b8\ub838\uc2b5\ub2c8\ub2e4",d:"1945\ub144 8\uc6d4 15\uc77c"},
-"12:18": {t:"\uc601\ud654 \uae30\uc0dd\ucda9\uc774 \uc544\uce74\ub370\ubbf8 \uc2dc\uc0c1\uc2dd\uc5d0\uc11c<br>\uc791\ud488\uc0c1\uc744 \uc218\uc0c1\ud558\uc600\uc2b5\ub2c8\ub2e4",d:"2020\ub144 2\uc6d4 9\uc77c"},
-"12:30": {t:"\ub9c1\ucee8\uc774 \ub178\uc608 \ud574\ubc29\uc744 \uc120\uc5b8\ud558\ub294<br>\uc5f0\uc124\uc744 \ud558\uc600\uc2b5\ub2c8\ub2e4",d:"1863\ub144 1\uc6d4 1\uc77c"},
-"13:00": {t:"\ud6c4\ucfe0\uc2dc\ub9c8 \uc6d0\uc804 \uc0ac\uace0\uc758<br>\uc218\uc18c \ud3ed\ubc1c\uc774 \ubc1c\uc0dd\ud558\uc600\uc2b5\ub2c8\ub2e4",d:"2011\ub144 3\uc6d4 12\uc77c"},
-"13:30": {t:"\ub118\uc5b4 \uac00\ub294 \uc0ac\ub78c\ub4e4 \u2013 6\uc6d4 \ubbfc\uc8fc\ud56d\uc7c1 \ub2f9\uc2dc<br>\uc774\ud55c\uc5f4 \uc5f4\uc0ac\uac00 \ucd5c\ub8e8\ud0c4\uc5d0 \ub9de\uc558\uc2b5\ub2c8\ub2e4",d:"1987\ub144 6\uc6d4 9\uc77c"},
-"14:46": {t:"\ub3d9\uc77c\ubcf8 \ub300\uc9c0\uc9c4\uc774 \ubc1c\uc0dd\ud558\uc5ec<br>\ucda4\ub098\ubbf8\uac00 \ub3c4\ud638\ucfe0\ub97c \ub36e\ucce4\uc2b5\ub2c8\ub2e4",d:"2011\ub144 3\uc6d4 11\uc77c"},
-"15:00": {t:"\uad11\ubcf5 \u2013 \uc77c\ubcf8 \ucc9c\ud669\uc774<br>\ubb34\uc870\uac74 \ud56d\ubcf5\uc744 \uc120\uc5b8\ud558\uc600\uc2b5\ub2c8\ub2e4",d:"1945\ub144 8\uc6d4 15\uc77c"},
-"15:22": {t:"BTS\uac00 \ube4c\ubcf4\ub4dc HOT 100 1\uc704\ub97c<br>\ucc98\uc74c\uc73c\ub85c \ucc28\uc9c0\ud558\uc600\uc2b5\ub2c8\ub2e4",d:"2020\ub144 9\uc6d4 1\uc77c"},
-"15:30": {t:"\ub2c9\uc2a8\uc774 \uc6cc\ud130\uac8c\uc774\ud2b8 \uc0ac\uac74\uc73c\ub85c<br>\ub300\ud1b5\ub839\uc9c1\uc5d0\uc11c \uc0ac\uc784\ud558\uc600\uc2b5\ub2c8\ub2e4",d:"1974\ub144 8\uc6d4 9\uc77c"},
-"16:00": {t:"\uc138\uc885\ub300\uc655\uc774 \ud6c8\ubbfc\uc815\uc74c\uc744<br>\ubc18\ud3ec\ud558\uc600\uc2b5\ub2c8\ub2e4",d:"1446\ub144 10\uc6d4 9\uc77c"},
-"16:30": {t:"\ucf54\ub85c\ub098\ubc14\uc774\ub7ec\uc2a4 \ud32c\ub370\ubbf9\uc774<br>WHO\uc5d0 \uc758\ud574 \uacf5\uc2dd \uc120\uc5b8\ub418\uc5c8\uc2b5\ub2c8\ub2e4",d:"2020\ub144 3\uc6d4 11\uc77c"},
-"17:04": {t:"\uc138\uc6d4\ud638 \uc120\uccb4\uac00 \uc644\uc804\ud788<br>\uce68\ubab0\ud558\uc600\uc2b5\ub2c8\ub2e4",d:"2014\ub144 4\uc6d4 16\uc77c"},
-"17:30": {t:"\ub9e8\ud574\ud2bc \ud504\ub85c\uc81d\ud2b8\uac00 \uc131\uacf5\ud558\uc5ec<br>\uc778\ub958 \ucd5c\ucd08\uc758 \ud575\uc2e4\ud5d8\uc774 \uc774\ub8e8\uc5b4\uc84c\uc2b5\ub2c8\ub2e4",d:"1942\ub144 12\uc6d4 2\uc77c"},
-"18:00": {t:"\ub2ec \ucc29\ub959\uc120 \uc774\uae00\ud638\uac00<br>\ub2ec \ud45c\uba74\uc5d0 \ucc29\ub959\ud558\uc600\uc2b5\ub2c8\ub2e4",d:"1969\ub144 7\uc6d4 20\uc77c"},
-"18:09": {t:"\ubca0\ub97c\ub9b0 \uc7a5\ubcbd\uc774 \ubb34\ub108\uc9c0\uae30<br>\uc2dc\uc791\ud558\uc600\uc2b5\ub2c8\ub2e4",d:"1989\ub144 11\uc6d4 9\uc77c"},
-"19:00": {t:"\ub300\ud55c\ubbfc\uad6d 2002 \uc6d4\ub4dc\ucef5<br>\ub300\ud55c\ubbfc\uad6d\uc774 4\uac15 \uc2e0\ud654\ub97c \uc4f4\uc2b5\ub2c8\ub2e4",d:"2002\ub144 6\uc6d4 22\uc77c"},
-"19:04": {t:"\uc544\ud3f4\ub85c 11\ud638\uac00 \ub2ec \uada4\ub3c4\uc5d0<br>\uc9c4\uc785\ud558\uc600\uc2b5\ub2c8\ub2e4",d:"1969\ub144 7\uc6d4 19\uc77c"},
-"20:00": {t:"\ubc15\uc815\ud76c \ub300\ud1b5\ub839\uc774<br>\uc0ac\uc0b4\ub418\uc5c8\uc2b5\ub2c8\ub2e4",d:"1979\ub144 10\uc6d4 26\uc77c"},
-"20:17": {t:"\uc2a4\ud2f0\ube0b \uc7a1\uc2a4\uac00 \uccab \ubc88\uc9f8 \uc544\uc774\ud3f0\uc744<br>\uc138\uc0c1\uc5d0 \uacf5\uac1c\ud558\uc600\uc2b5\ub2c8\ub2e4",d:"2007\ub144 1\uc6d4 9\uc77c"},
-"20:56": {t:"\ub2d0 \uc554\uc2a4\ud2b8\ub871\uc774 \ub2ec \ud45c\uba74\uc5d0<br>\uccab \ubc1c\uc744 \ub514\ub52c\uc2b5\ub2c8\ub2e4",d:"1969\ub144 7\uc6d4 20\uc77c"},
-"21:00": {t:"10.26 \uc0ac\uac74 \u2013 \uae40\uc7ac\uaddc\uac00<br>\ubc15\uc815\ud76c\ub97c \uc0ac\uc0b4\ud55c \uc2dc\uac01\uc785\ub2c8\ub2e4",d:"1979\ub144 10\uc6d4 26\uc77c"},
-"22:00": {t:"\ucf54\ub85c\ub098 \uc77c\uc77c \ud655\uc9c4\uc790\uac00<br>\ucc98\uc74c\uc73c\ub85c \ubcf4\uace0\ub418\uc5c8\uc2b5\ub2c8\ub2e4",d:"2019\ub144 12\uc6d4 31\uc77c"},
-"23:00": {t:"\ub2e4\uc774\uc560\ub098\ubd44\uac00 \uad50\ud1b5\uc0ac\uace0\ub85c<br>\uc138\uc0c1\uc744 \ub5a0\ub0ac\uc2b5\ub2c8\ub2e4",d:"1997\ub144 8\uc6d4 31\uc77c"},
-"23:40": {t:"\uc77c\ubcf8\uc774 \uc9c4\uc8fc\ub9cc\uc744 \uacf5\uaca9\ud558\uc5ec<br>\ud0dc\ud3c9\uc591 \uc804\uc7c1\uc774 \uc2dc\uc791\ub418\uc5c8\uc2b5\ub2c8\ub2e4",d:"1941\ub144 12\uc6d4 7\uc77c"},
-"00:00": {t:"\uc0c8\ud574\uac00 \ubc1d\uc558\uc2b5\ub2c8\ub2e4<br>\ubca0\ub97c\ub9b0 \uc7a5\ubcbd\uc774 \uacf5\uc2dd \uac1c\ubc29\ub41c \uc2dc\uac01\uc785\ub2c8\ub2e4",d:"1990\ub144 1\uc6d4 1\uc77c"},
-"00:56": {t:"\ub300\ud55c\ud56d\uacf5 007\ud3b8\uc774<br>\uc18c\ub828 \uc804\ud22c\uae30\uc5d0 \uc758\ud574 \uaca9\ucd94\ub418\uc5c8\uc2b5\ub2c8\ub2e4",d:"1983\ub144 9\uc6d4 1\uc77c"}
-};
-var keys = Object.keys(events).sort();
-var elHM = document.getElementById("hm");
-var elSec = document.getElementById("seconds");
-var elEvt = document.getElementById("event-text");
-var elDate = document.getElementById("event-date");
-var elCD = document.getElementById("countdown-text");
-var elLogo = document.getElementById("logo");
-var elWrap = document.getElementById("event-wrap");
-var prevKey = "";
-var wakeLock = null;
+<div id="logo" onclick="toggleLogo()">FLOVAH</div>
+<script>
+var EVENTS = [
+  [1, 23, "체르노빌 원자력 발전소 4호기가<br>폭발하였습니다", "1986년 4월 26일"],
+  [2, 46, "타이타닉호가 빙산에 충돌하여<br>침몰하기 시작하였습니다", "1912년 4월 15일"],
+  [3, 45, "세종대왕이 훈민정음 창제를 위해<br>밤늦도록 연구하였습니다", "1443년"],
+  [4, 0, "노르망디 상륙작전의<br>공수부대가 낙하하였습니다", "1944년 6월 6일"],
+  [4, 15, "이순신 장군이 새벽 출전을 명하여<br>왜적을 격파하였습니다", "1592년"],
+  [4, 30, "간디가 소금 행진을 시작하여<br>인도 독립의 불씨를 당겼습니다", "1930년 3월 12일"],
+  [5, 12, "에베레스트 정상에<br>인류의 발자국이 처음 새겨졌습니다", "1953년 5월 29일"],
+  [5, 29, "존 F. 케네디 대통령이<br>달 탐사 계획을 발표하였습니다", "1961년 5월 25일"],
+  [6, 0, "D-Day 노르망디 해변에<br>연합군이 상륙하였습니다", "1944년 6월 6일"],
+  [6, 30, "마틴 루터 킹 목사가<br>셀마 행진을 이끌었습니다", "1965년 3월 7일"],
+  [7, 0, "런던 대공습이 시작되어<br>도시가 폭격을 받았습니다", "1940년 9월 7일"],
+  [7, 30, "파리 바스티유 감옥의 문이<br>혁명군에 의해 열렸습니다", "1789년 7월 14일"],
+  [7, 45, "마리 앙투아네트가<br>단두대 앞에 섰습니다", "1793년 10월 16일"],
+  [8, 15, "히로시마에 원자폭탄이<br>투하되었습니다", "1945년 8월 6일"],
+  [8, 46, "아메리칸 항공 11편이<br>세계무역센터 북쪽 타워에 충돌하였습니다", "2001년 9월 11일"],
+  [9, 3, "유나이티드 항공 175편이<br>세계무역센터 남쪽 타워에 충돈하였습니다", "2001년 9월 11일"],
+  [9, 8, "4.19 혁명의 학생들이<br>거리로 나섰습니다", "1960년 4월 19일"],
+  [9, 15, "베를린 장벽 건설이<br>시작되었습니다", "1961년 8월 13일"],
+  [9, 45, "세월호가 진도 앞바다에서<br>침몰하기 시작하였습니다", "2014년 4월 16일"],
+  [10, 0, "넬슨 만델라가 27년 만에<br>감옥에서 석방되었습니다", "1990년 2월 11일"],
+  [10, 4, "마더 테레사가 노벨 평화상<br>수상 연설을 하였습니다", "1979년 12월 10일"],
+  [10, 56, "단 암스트롱이 달 표면에<br>첫 발을 내디뎠습니다", "1969년 7월 20일"],
+  [11, 0, "제1차 세계대전의 휴전 협정이<br>발효되었습니다", "1918년 11월 11일"],
+  [11, 30, "로자 파크스가 버스 좌석 양보를<br>거부하였습니다", "1955년 12월 1일"],
+  [11, 38, "존 F. 케네디 대통령이<br>달라스에서 저격을 당하였습니다", "1963년 11월 22일"],
+  [12, 0, "대핧민국 임시정부가<br>수립되었습니다", "1919년 4월 11일"],
+  [12, 30, "나폴레옹이 워털루 전투에서<br>최후의 돌격을 명하였습니다", "1815년 6월 18일"],
+  [13, 0, "BTS가 UN 총회에서<br>청년 세대를 대표하여 연설하였습니다", "2018년 9월 24일"],
+  [13, 30, "5.18 민주화 운동의 시민들이<br>광주 금남로에 모였습니다", "1980년 5월 18일"],
+  [14, 0, "아폴로 13호에 폭발 사고가<br>발생하였습니다", "1970년 4월 13일"],
+  [14, 30, "라이트 형제가 인류 최초의<br>동력 비행에 성공하였습니다", "1903년 12월 17일"],
+  [14, 46, "링컨 대통령이 포드 극장에서<br>저격을 당하였습니다", "1865년 4월 14일"],
+  [15, 0, "광복절, 대한민국이<br>일본으로부터 해방되었습니다", "1945년 8월 15일"],
+  [15, 30, "체 게바라가 혁명의 연설을<br>하바나에서 하였습니다", "1959년 1월"],
+  [16, 0, "2002 한일 월드컵 한국 대 독일<br>4강전이 시작되었습니다", "2002년 6월 25일"],
+  [16, 30, "보스턴 차 사건이 발생하여<br>미국 독립의 도화선이 되었습니다", "1773년 12월 16일"],
+  [17, 0, "6월 항쟁의 시민들이<br>민주화를 외쳤습니다", "1987년 6월"],
+  [17, 30, "갈릴레오가 종교재판에서<br>지동설을 철회하였습니다", "1633년 6월 22일"],
+  [18, 0, "촛불 집회가 광화문에서<br>시작되었습니다", "2016년 11월"],
+  [18, 30, "클레오파트라가 로마 원로원에<br>연설하였습니다", "기원전 46년"],
+  [19, 0, "기샽충이 칸 영화제에서<br>황금종려상을 수상하였습니다", "2019년 5월 25일"],
+  [19, 17, "베를린 장벽이 무너지기 시작하여<br>동서독이 하나가 되었습니다", "1989년 11월 9일"],
+  [20, 0, "아폴로 11호가<br>달 궤도에 진입하였습니다", "1969년 7월 19일"],
+  [20, 17, "프랑스 혁명군이 바스티유를<br>완전히 점령하였습니다", "1789년 7월 14일"],
+  [21, 0, "6.25 전쟁이 발발한 날<br>한반도에 어둠이 내렸습니다", "1950년 6월 25일"],
+  [21, 30, "프린세스 다이애나가<br>파리에서 교통사고를 당하였습니다", "1997년 8월 31일"],
+  [22, 0, "동학 농민군이 밤을 틈타<br>봉기를 일으켰습니다", "1894년"],
+  [22, 30, "오사마 빈 라덴 제거 작전이<br>개시되었습니다", "2011년 5월 2일"],
+  [23, 0, "판문점에서 한국전쟁<br>정전협정이 체결되었습니다", "1953년 7월 27일"],
+  [23, 30, "독일 통일 조약이<br>최종 서명되었습니다", "1990년 9월 12일"],
+  [23, 59, "새로운 밀레니엄을 맞이하여<br>전 세계가 환호하였습니다", "2000년 1월 1일"],
+  [0, 0, "새해 첫 순간,<br>세계 곳곳에서 불꽃이 터졌습니다", "매년 1월 1일"],
+  [0, 30, "타이타닉호의 마지막 구조 신호가<br>발신되었습니다", "1912년 4월 15일"]
+];
 
-function pad(n){ return n < 10 ? "0" + n : "" + n; }
-
-function getAmPm(h){
-if(h < 12) return {label: "\uc624\uc804", hour: h === 0 ? 12 : h};
-return {label: "\uc624\ud6c4", hour: h === 12 ? 12 : h - 12};
-}
-
-function findNextEvent(nowKey){
-for(var i = 0; i < keys.length; i++){
-if(keys[i] > nowKey) return keys[i];
-}
-return keys[0];
-}
-
-function diffMinutes(nowH, nowM, targetKey){
-var parts = targetKey.split(":");
-var th = parseInt(parts[0], 10);
-var tm = parseInt(parts[1], 10);
-var nowTotal = nowH * 60 + nowM;
-var targetTotal = th * 60 + tm;
-if(targetTotal <= nowTotal) targetTotal += 1440;
-return targetTotal - nowTotal;
-}
-
-function update(){
-var now = new Date();
-var h = now.getHours();
-var m = now.getMinutes();
-var s = now.getSeconds();
-var ap = getAmPm(h);
-var hmStr = ap.label + " " + ap.hour + "\uc2dc " + pad(m) + "\ubd84";
-var secStr = ":" + pad(s);
-elHM.textContent = hmStr;
-elSec.textContent = secStr;
-var nowKey = pad(h) + ":" + pad(m);
-if(nowKey !== prevKey){
-if(prevKey !== ""){
-elWrap.classList.add("flip-out");
-setTimeout(function(){
-renderEvent(nowKey, h, m);
-elWrap.classList.remove("flip-out");
-elWrap.classList.add("flip-in");
-setTimeout(function(){ elWrap.classList.remove("flip-in"); }, 300);
-}, 300);
-} else {
-renderEvent(nowKey, h, m);
-}
-prevKey = nowKey;
-}
-}
-
-function renderEvent(nowKey, h, m){
-if(events[nowKey]){
-elEvt.innerHTML = events[nowKey].t;
-elDate.textContent = "(" + events[nowKey].d + ")";
-elCD.textContent = "";
-elEvt.style.display = "";
-elDate.style.display = "";
-elCD.style.display = "none";
-} else {
-var nextKey = findNextEvent(nowKey);
-var diff = diffMinutes(h, m, nextKey);
-elEvt.style.display = "none";
-elDate.style.display = "none";
-elCD.style.display = "";
-elCD.innerHTML = "\uc55e\uc73c\ub85c " + diff + "\ubd84 \ud6c4<br>\ud558\ub098\uc758 \uc0ac\uac74\uc774 \ubc1c\uc0dd\ud569\ub2c8\ub2e4";
-}
-}
-
-function toggleLogo(){
-elLogo.classList.toggle("hidden");
-}
-document.body.addEventListener("click", toggleLogo);
-
-async function requestWakeLock(){
-try{
-if("wakeLock" in navigator){
-wakeLock = await navigator.wakeLock.request("screen");
-wakeLock.addEventListener("release", function(){
-wakeLock = null;
+EVENTS.sort(function(a, b) {
+  return (a[0] * 60 + a[1]) - (b[0] * 60 + b[1]);
 });
+
+var timeMainEl = document.getElementById("time-main");
+var timeSecEl = document.getElementById("time-sec");
+var eventTimeEl = document.getElementById("event-time");
+var eventTextEl = document.getElementById("event-text");
+var eventDateEl = document.getElementById("event-date");
+var eventDisplay = document.getElementById("event-display");
+var logoEl = document.getElementById("logo");
+var logoVisible = true;
+var lastEventKey = "";
+
+function formatPeriod(h) {
+  return h < 12 ? "오전" : "오후";
 }
-}catch(e){}
+
+function formatHour12(h) {
+  if (h === 0) return 12;
+  if (h > 12) return h - 12;
+  return h;
 }
-document.addEventListener("visibilitychange", function(){
-if(document.visibilityState === "visible") requestWakeLock();
+
+function formatTime(h, m) {
+  return formatPeriod(h) + " " + formatHour12(h) + "시 " + String(m).padStart(2, "0") + "분";
+}
+
+function findCurrentEvent(h, m) {
+  var totalMin = h * 60 + m;
+  for (var i = EVENTS.length - 1; i >= 0; i--) {
+    var evMin = EVENTS[i][0] * 60 + EVENTS[i][1];
+    if (evMin === totalMin) {
+      return EVENTS[i];
+    }
+  }
+  return null;
+}
+
+function findNextEvent(h, m) {
+  var totalMin = h * 60 + m;
+  for (var i = 0; i < EVENTS.length; i++) {
+    var evMin = EVENTS[i][0] * 60 + EVENTS[i][1];
+    if (evMin > totalMin) {
+      return { event: EVENTS[i], diff: evMin - totalMin };
+    }
+  }
+  var firstEvMin = EVENTS[0][0] * 60 + EVENTS[0][1];
+  return { event: EVENTS[0], diff: (1440 - totalMin) + firstEvMin };
+}
+
+function flipTransition(callback) {
+  eventDisplay.classList.remove("flip-in");
+  eventDisplay.classList.add("flip-out");
+  setTimeout(function() {
+    callback();
+    eventDisplay.classList.remove("flip-out");
+    eventDisplay.classList.add("flip-in");
+  }, 400);
+}
+
+function updateClock() {
+  var now = new Date();
+  var h = now.getHours();
+  var m = now.getMinutes();
+  var s = now.getSeconds();
+
+  timeMainEl.textContent = formatTime(h, m);
+  timeSecEl.textContent = ":" + String(s).padStart(2, "0");
+
+  var ev = findCurrentEvent(h, m);
+  var eventKey = "";
+
+  if (ev) {
+    eventKey = ev[0] + ":" + ev[1] + ":" + ev[2];
+    if (eventKey !== lastEventKey) {
+      flipTransition(function() {
+        eventTimeEl.textContent = formatTime(ev[0], ev[1]) + ",";
+        eventTextEl.innerHTML = ev[2];
+        eventDateEl.textContent = "(" + ev[3] + ")";
+      });
+      lastEventKey = eventKey;
+    }
+  } else {
+    var next = findNextEvent(h, m);
+    eventKey = "next:" + next.diff;
+    if (eventKey !== lastEventKey) {
+      flipTransition(function() {
+        eventTimeEl.textContent = "";
+        eventTextEl.innerHTML = "앞으로 " + next.diff + "분 후<br>하나의 사건이 발생합니다";
+        eventDateEl.textContent = "";
+      });
+      lastEventKey = eventKey;
+    }
+  }
+}
+
+function toggleLogo() {
+  logoVisible = !logoVisible;
+  if (logoVisible) {
+    logoEl.classList.remove("hidden");
+  } else {
+    logoEl.classList.add("hidden");
+  }
+}
+
+async function requestWakeLock() {
+  try {
+    if ("wakeLock" in navigator) {
+      await navigator.wakeLock.request("screen");
+    }
+  } catch (e) {}
+}
+
+document.addEventListener("visibilitychange", function() {
+  if (document.visibilityState === "visible") {
+    requestWakeLock();
+  }
 });
+
+document.body.addEventListener("click", function(e) {
+  if (e.target !== logoEl) {
+    toggleLogo();
+  }
+});
+
+updateClock();
+setInterval(updateClock, 1000);
 requestWakeLock();
-
-update();
-setInterval(update, 1000);
-})();
 </script>
 </body>
 </html>
-html,body{width:100%;height:100%;overflow:hidden;background:#000;color:#fff;font-family:system-ui,-apple-system,BlinkMacSystemFont,sans-serif;-webkit-font-smoothing:antialiased;user-select:none;-webkit-user-select:none}
-body{display:flex;flex-direction:column;justify-content:center;align-items:center;padding:env(safe-area-inset-top) 8vw env(safe-area-inset-bottom)}
-#c{perspective:800px;width:100%;max-width:600px;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;flex:1}
-.card{transform-style:preserve-3d;width:100%}
-#t,#e{font-size:clamp(20px,5vw,40px);font-weight:300;letter-spacing:0.01em;line-height:1.5;opacity:0.9}
-#t{margin-bottom:0.3em}
-#t .s{font-size:0.55em;opacity:0.45;letter-spacing:0.15em;font-variant-numeric:tabular-nums}
-#d{font-size:clamp(11px,2.5vw,16px);font-weight:300;letter-spacing:0.05em;opacity:0.35;margin-top:1.2em}
-#l{position:fixed;bottom:max(20px,env(safe-area-inset-bottom,20px));left:50%;transform:translateX(-50%);font-size:12px;font-weight:300;letter-spacing:0.35em;opacity:0.2}
-@keyframes fo{0%{transform:rotateX(0);opacity:1}50%{transform:rotateX(-90deg);opacity:0}100%{transform:rotateX(-90deg);opacity:0}}
-@keyframes fi{0%{transform:rotateX(90deg);opacity:0}50%{transform:rotateX(90deg);opacity:0}100%{transform:rotateX(0);opacity:1}}
-.fo{animation:fo .7s ease-in forwards;transform-origin:bottom center}
-.fi{animation:fi .7s ease-out forwards;transform-origin:top center}
-@media(orientation:portrait){#t,#e{font-size:clamp(28px,7vw,56px)}#d{font-size:clamp(14px,3.5vw,22px)}}
-</style>
-</head>
-<body>
-<div id="c"><div class="card"><div id="t"></div><div id="e"></div><div id="d"></div></div></div>
-<div id="l">FLOVAH</div>
-<script>
-var E=[
-[0,0,"자정이 지나고 새로운 하루가<br>시작되었습니다","매일"],
-[0,30,"인도가 영국으로부터<br>독립을 선언하였습니다","1947년 8월 15일"],
-[1,5,"타이타닉호의 마지막 구명보트가<br>바다 위에 내려졌습니다","1912년 4월 15일"],
-[1,23,"체르노빌 원자력 발전소 4호기가<br>폭발하였습니다","1986년 4월 26일"],
-[2,15,"라이트 형제가 키티호크에서<br>동력 비행에 성공하였습니다","1903년 12월 17일"],
-[2,47,"아폴로 13호의 산소 탱크가<br>폭발하였습니다","1970년 4월 14일"],
-[3,0,"간디가 소금 행진을<br>시작하였습니다","1930년 3월 12일"],
-[3,45,"세종대왕이 훈민정음을<br>반포하였습니다","1446년 10월 9일"],
-[4,0,"손기정 선수가 베를린 올림픽<br>마라톤에서 금메달을 획득하였습니다","1936년 8월 9일"],
-[4,15,"이순신 장군이 한산도 대첩에서<br>왜군을 대파하였습니다","1592년 8월 14일"],
-[4,30,"황영조 선수가 바르셀로나 올림픽<br>마라톤에서 금메달을 획득하였습니다","1992년 8월 9일"],
-[5,0,"2002 월드컵 한국 대 폴란드전에서<br>황선홍이 선제골을 넣었습니다","2002년 6월 4일"],
-[5,30,"동학 농민 운동이<br>시작되었습니다","1894년 2월"],
-[6,0,"연합군이 노르망디 해변에<br>상륙을 개시하였습니다","1944년 6월 6일"],
-[6,15,"에베레스트 정상에 인류가<br>처음으로 도달하였습니다","1953년 5월 29일"],
-[7,0,"봉준호 감독이 칸 영화제에서<br>황금종려상을 수상하였습니다","2019년 5월 25일"],
-[7,30,"챌린저 우주왕복선이<br>발사 73초 만에 폭발하였습니다","1986년 1월 28일"],
-[8,0,"3.1 만세 운동이<br>시작되었습니다","1919년 3월 1일"],
-[8,15,"히로시마에 원자폭탄<br>리틀보이가 투하되었습니다","1945년 8월 6일"],
-[8,30,"김연아 선수가 세계 신기록으로<br>금메달을 획득하였습니다","2010년 2월 25일"],
-[8,46,"항공기 한 대가 세계무역센터<br>북쪽 타워에 충돌하였습니다","2001년 9월 11일"],
-[9,15,"베를린 장벽이<br>무너지기 시작하였습니다","1989년 11월 9일"],
-[9,45,"세월호가 진도 앞바다에서<br>침몰하기 시작하였습니다","2014년 4월 16일"],
-[10,0,"대한민국 정부가<br>수립되었습니다","1948년 8월 15일"],
-[10,56,"닐 암스트롱이 달 표면에<br>인류의 첫 발을 내디뎠습니다","1969년 7월 20일"],
-[11,0,"제1차 세계대전의 휴전 협정이<br>발효되었습니다","1918년 11월 11일"],
-[11,30,"6.25 전쟁 휴전 협정이<br>체결되었습니다","1953년 7월 27일"],
-[12,0,"대한민국이 IMF에<br>구제금융을 신청하였습니다","1997년 11월 21일"],
-[12,30,"존 F. 케네디 대통령이<br>달라스에서 저격당하였습니다","1963년 11월 22일"],
-[13,0,"BTS가 빌보드 핫100<br>1위를 달성하였습니다","2020년 8월 31일"],
-[13,30,"5.18 광주 민주화 운동이<br>시작되었습니다","1980년 5월 18일"],
-[14,0,"프랑스 대혁명이<br>시작되었습니다","1789년 7월 14일"],
-[14,30,"안정환 선수가 2002 월드컵<br>미국전에서 결승골을 넣었습니다","2002년 6월 10일"],
-[15,0,"아인슈타인이 특수상대성이론을<br>발표하였습니다","1905년 6월 30일"],
-[16,0,"2002 월드컵에서 대한민국이<br>4강에 진출하였습니다","2002년 6월 22일"],
-[17,0,"싸이의 강남스타일이<br>유튜브 10억 뷰를 돌파하였습니다","2012년 12월 21일"],
-[17,30,"6월 민주항쟁이<br>시작되었습니다","1987년 6월 10일"],
-[18,0,"88 서울 올림픽이<br>개막하였습니다","1988년 9월 17일"],
-[19,0,"봉준호 감독의 기생충이<br>아카데미 작품상을 수상하였습니다","2020년 2월 9일"],
-[20,0,"촛불 시민혁명으로<br>대통령 탄핵이 인용되었습니다","2017년 3월 10일"],
-[21,0,"김대중 대통령이<br>노벨 평화상을 수상하였습니다","2000년 12월 10일"],
-[22,0,"손흥민 선수가 프리미어리그<br>득점왕에 올랐습니다","2022년 5월 22일"],
-[23,0,"오징어 게임이 넷플릭스<br>글로벌 1위를 달성하였습니다","2021년 10월"],
-[23,40,"타이타닉호가 빙산과<br>충돌하였습니다","1912년 4월 14일"],
-[23,59,"하루가 저물고 있습니다.<br>내일 또 다른 역사가 시작됩니다","매일"]
-];
-function p(n){return String(n).padStart(2,"0")}
-E.sort(function(a,b){return(a[0]*60+a[1])-(b[0]*60+b[1])});
-function timeStr(h,m,s){var ap=h<12?"오전":"오후";var h2=h===0?12:h>12?h-12:h;return ap+" "+h2+"시 "+m+"분 <span class=s>:"+p(s)+"</span>";}
-function findEv(h,m){for(var i=0;i<E.length;i++){if(E[i][0]===h&&E[i][1]===m)return E[i]}return null}
-function findNext(h,m){var now=h*60+m;for(var i=0;i<E.length;i++){var t=E[i][0]*60+E[i][1];if(t>now)return t-now}var f=E[0][0]*60+E[0][1];return(1440-now)+f}
-var wl=null;
-function rw(){try{navigator.wakeLock.request("screen").then(function(l){wl=l})}catch(e){}}
-document.addEventListener("visibilitychange",function(){if(document.visibilityState==="visible")rw()});
-var lk="";
-function up(){var n=new Date();var h=n.getHours(),m=n.getMinutes(),s=n.getSeconds();var te=document.getElementById("t");var ee=document.getElementById("e");var de=document.getElementById("d");var cd=document.querySelector(".card");te.innerHTML=timeStr(h,m,s);var k=p(h)+":"+p(m);if(k===lk)return;lk=k;var ev=findEv(h,m);cd.classList.remove("fi");cd.classList.add("fo");setTimeout(function(){if(ev){ee.innerHTML=ev[2];de.textContent="("+ev[3]+")";}else{var nx=findNext(h,m);if(nx<=60){ee.innerHTML="앞으로 "+nx+"분 후<br>하나의 사건이 발생합니다";}else{var hr=Math.floor(nx/60);var mn=nx%60;ee.innerHTML="앞으로 "+hr+"시간 "+mn+"분 후<br>하나의 사건이 발생합니다";}de.textContent="";}cd.classList.remove("fo");cd.classList.add("fi");},350)}
-rw();up();setInterval(up,1000);
-var lv=true;document.body.addEventListener("click",function(){lv=!lv;document.getElementById("l").style.opacity=lv?"0.2":"0"});
-</script></body></html>
