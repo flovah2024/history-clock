@@ -9,10 +9,10 @@
 <title>History Clock</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400&family=EB+Garamond:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-html,body{width:100%;height:100%;overflow:hidden;background:#000;color:#fff;font-family:'Noto Serif KR','Georgia','Times New Roman',serif;-webkit-font-smoothing:antialiased;user-select:none;-webkit-user-select:none;transition:background-color 1.5s ease,color 1.5s ease}
+html,body{width:100%;height:100%;overflow:hidden;background:#000;color:#fff;font-family:'Noto Serif KR','EB Garamond','Georgia','Times New Roman',serif;font-weight:500;-webkit-font-smoothing:antialiased;user-select:none;-webkit-user-select:none;transition:background-color 1.5s ease,color 1.5s ease}
 body{display:flex;flex-direction:column;justify-content:center;align-items:center;padding:env(safe-area-inset-top) 8vw env(safe-area-inset-bottom)}
 body.light-mode{background:#fff;color:#000}
 body.beige-mode{background:#f5f0e8;color:#2a2520}
@@ -33,7 +33,11 @@ body.navy-mode #second-hand-container circle{fill:rgba(200,214,229,0.12)}
 #second-hand-container{position:fixed;top:50%;left:50%;width:min(85vw,85vh);height:min(85vw,85vh);transform:translate(-50%,-50%);pointer-events:none;z-index:0}
 #second-number{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);font-size:clamp(100px,25vw,200px);font-weight:100;opacity:0.055;pointer-events:none;z-index:0;letter-spacing:-0.04em;display:none;line-height:1;font-variant-numeric:tabular-nums}
 #clock-container{position:relative;z-index:1}
-#logo{position:fixed;bottom:max(20px,env(safe-area-inset-bottom,20px));left:50%;transform:translateX(-50%);font-size:12px;font-weight:300;letter-spacing:0.35em;opacity:0.2;pointer-events:none;transition:opacity 0.3s ease}
+#logo{position:fixed;bottom:max(20px,env(safe-area-inset-bottom,20px));left:50%;transform:translateX(-50%);opacity:0.2;pointer-events:none;transition:opacity 0.3s ease}
+#logo img{height:clamp(14px,2.5vw,22px);width:auto;display:block;filter:brightness(0) invert(1)}
+body.light-mode #logo img{filter:brightness(0)}
+body.beige-mode #logo img{filter:brightness(0) sepia(0.4)}
+body.navy-mode #logo img{filter:brightness(0) invert(1)}
 @media (orientation:landscape) and (max-height:500px){#time-text,#event-text{font-size:clamp(15px,3.5vh,26px);line-height:1.3}#date-text{font-size:clamp(11px,2vh,14px);margin-top:0.5em}#time-text{margin-bottom:0.15em}body{padding:env(safe-area-inset-top) 5vw env(safe-area-inset-bottom)}#clock-container{max-width:90%}}
 @media (orientation:landscape) and (min-height:501px){#time-text,#event-text{font-size:clamp(20px,3.2vw,36px)}#clock-container{max-width:750px}}
 @keyframes flipOut{0%{transform:rotateX(0deg);opacity:1}50%{transform:rotateX(-90deg);opacity:0}100%{transform:rotateX(-90deg);opacity:0}}
@@ -46,57 +50,38 @@ body.navy-mode #second-hand-container circle{fill:rgba(200,214,229,0.12)}
 #intro-screen.hidden{opacity:0;pointer-events:none}
 #intro-title{position:absolute;font-size:clamp(28px,8vw,56px);font-weight:300;letter-spacing:0.05em;text-align:center;opacity:0;transition:opacity 2s ease;pointer-events:none}
 #intro-title.show{opacity:1;transition:opacity 3s ease}
+#intro-logo{position:absolute;margin-top:clamp(100px,20vw,160px);opacity:0;transition:opacity 2s ease;pointer-events:none}
+#intro-logo.show{opacity:1;transition:opacity 3s ease}
+#intro-logo img{height:clamp(16px,3vw,26px);width:auto;filter:brightness(0) invert(1)}
+#intro-touch-hint{position:fixed;bottom:0;left:50%;transform:translateX(-50%);font-size:clamp(14px,3vw,18px);font-weight:300;text-align:center;opacity:0;transition:opacity 1s ease;pointer-events:none;padding:clamp(20px,4vw,30px) 20px}
+#intro-touch-hint.show{opacity:0.6;animation:slideUp 0.6s ease-out forwards}
+#intro-touch-hint.hide{animation:slideDown 0.8s ease-in forwards}
+@keyframes slideUp{from{transform:translateX(-50%) translateY(40px);opacity:0}to{transform:translateX(-50%) translateY(0);opacity:0.6}}
+@keyframes slideDown{from{transform:translateX(-50%) translateY(0);opacity:0.6}to{transform:translateX(-50%) translateY(40px);opacity:0}}
 #intro-description{position:absolute;font-size:clamp(16px,4vw,32px);font-weight:300;text-align:center;line-height:1.8;opacity:0;transition:opacity 2s ease;max-width:85%;letter-spacing:0.02em;pointer-events:none}
 #intro-description.show{opacity:0.8;transition:opacity 1.5s ease}
 
-/* Settings Overlay */
-#settings-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);display:none;align-items:center;justify-content:center;z-index:99;opacity:0;transition:opacity 0.5s ease}
-#settings-overlay.show{display:flex;opacity:1}
-#settings-modal{background:#1a1a1a;border-radius:16px;padding:clamp(20px,4vw,28px) clamp(20px,4vw,32px);max-height:80vh;overflow-y:auto;box-shadow:0 10px 40px rgba(0,0,0,0.5);transition:background-color 1.5s ease,color 1.5s ease;text-align:center;display:flex;flex-direction:column;align-items:center}
-body.light-mode #settings-modal{background:#f5f5f5;color:#000}
-body.beige-mode #settings-modal{background:#ede8df;color:#2a2520}
-body.navy-mode #settings-modal{background:#0f1d33;color:#c8d6e5}
-#settings-modal h3{font-size:clamp(11px,2.2vw,13px);font-weight:400;margin-bottom:0.5em;margin-top:1em;opacity:0.4;letter-spacing:0.1em;text-transform:uppercase}
-#settings-modal h3:first-child{margin-top:0}
-.settings-group{display:flex;flex-wrap:wrap;gap:clamp(8px,2vw,10px);margin-bottom:0.6em;justify-content:center}
-.settings-btn{padding:clamp(10px,2.5vw,14px) clamp(20px,4.5vw,28px);border:none;border-radius:22px;font-size:clamp(14px,3vw,17px);font-weight:400;cursor:pointer;background:rgba(255,255,255,0.1);color:#fff;transition:all 0.3s ease,background-color 1.5s ease,color 1.5s ease;letter-spacing:0.02em;white-space:nowrap}
-.settings-btn:hover{background:rgba(255,255,255,0.2)}
-.settings-btn.active{background:#fff;color:#000}
-body.light-mode .settings-btn{background:rgba(0,0,0,0.1);color:#000}
-body.light-mode .settings-btn.active{background:#000;color:#fff}
-body.beige-mode .settings-btn{background:rgba(42,37,32,0.1);color:#2a2520}
+/* Bottom toolbar */
+#settings-bar{position:fixed;bottom:0;left:0;width:100%;z-index:99;transform:translateY(100%);transition:transform 0.5s cubic-bezier(0.4,0,0.2,1),background-color 1.5s ease;background:rgba(20,20,20,0.85);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);padding:clamp(14px,3vw,20px) clamp(16px,4vw,24px) max(clamp(14px,3vw,20px),env(safe-area-inset-bottom));display:flex;align-items:center;justify-content:center;gap:clamp(16px,4vw,28px);flex-wrap:wrap}
+#settings-bar.show{transform:translateY(0)}
+body.light-mode #settings-bar{background:rgba(245,245,245,0.9)}
+body.beige-mode #settings-bar{background:rgba(240,235,225,0.9)}
+body.navy-mode #settings-bar{background:rgba(10,22,40,0.9)}
+.bar-section{display:flex;align-items:center;gap:clamp(6px,1.5vw,8px)}
+.bar-label{font-size:clamp(10px,2vw,12px);font-weight:400;opacity:0.35;letter-spacing:0.08em;margin-right:2px}
+.bar-divider{width:1px;height:20px;background:rgba(255,255,255,0.12);margin:0 clamp(4px,1vw,8px)}
+body.light-mode .bar-divider{background:rgba(0,0,0,0.12)}
+body.beige-mode .bar-divider{background:rgba(42,37,32,0.12)}
+body.navy-mode .bar-divider{background:rgba(200,214,229,0.12)}
+.settings-btn{padding:clamp(7px,1.8vw,10px) clamp(14px,3vw,20px);border:none;border-radius:16px;font-size:clamp(12px,2.5vw,14px);font-weight:400;cursor:pointer;background:rgba(255,255,255,0.08);color:#fff;transition:all 0.25s ease,background-color 1.5s ease,color 1.5s ease;letter-spacing:0.02em;white-space:nowrap}
+.settings-btn:hover{background:rgba(255,255,255,0.18)}
+.settings-btn.active{background:rgba(255,255,255,0.95);color:#000}
+body.light-mode .settings-btn{background:rgba(0,0,0,0.07);color:#000}
+body.light-mode .settings-btn.active{background:rgba(0,0,0,0.85);color:#fff}
+body.beige-mode .settings-btn{background:rgba(42,37,32,0.08);color:#2a2520}
 body.beige-mode .settings-btn.active{background:#8b6f47;color:#fff}
-body.navy-mode .settings-btn{background:rgba(200,214,229,0.1);color:#c8d6e5}
+body.navy-mode .settings-btn{background:rgba(200,214,229,0.08);color:#c8d6e5}
 body.navy-mode .settings-btn.active{background:#4a7cc9;color:#fff}
-#start-btn{width:auto;padding:clamp(10px,2.5vw,14px) clamp(32px,8vw,52px);border:none;border-radius:22px;background:#fff;color:#000;font-size:clamp(14px,3vw,17px);font-weight:400;cursor:pointer;margin-top:1em;align-self:center;letter-spacing:0.05em;opacity:0;transform:translateY(10px);transition:opacity 1.4s ease,transform 1.4s ease,box-shadow 0.3s ease,background-color 1.5s ease,color 1.5s ease;pointer-events:none}
-#start-btn.visible{opacity:1;transform:translateY(0);pointer-events:auto}
-#start-btn:hover{box-shadow:0 4px 20px rgba(255,255,255,0.15)}
-body.light-mode #start-btn{background:#000;color:#fff}
-body.beige-mode #start-btn{background:#8b6f47;color:#fff}
-body.navy-mode #start-btn{background:#4a7cc9;color:#fff}
-
-/* Onboarding: no box, transparent, centered */
-.onboarding{background:transparent!important;box-shadow:none!important;display:flex;flex-direction:column;align-items:center}
-.onboarding .settings-section-hand{display:none}
-.onboarding #label-theme{display:none}
-body.light-mode .onboarding{background:transparent!important}
-body.beige-mode .onboarding{background:transparent!important}
-
-/* Onboarding overlay: no dim background */
-#settings-overlay.onboarding-overlay{background:transparent}
-
-/* Onboarding message */
-#onboarding-msg{display:none;font-size:clamp(20px,5vw,36px);font-weight:300;text-align:center;margin-bottom:2em;letter-spacing:0.02em;line-height:1.6;opacity:0;transition:opacity 1.2s ease}
-.onboarding #onboarding-msg{display:block}
-#onboarding-msg.show{opacity:0.85}
-
-/* Onboarding: buttons hidden initially, fade in individually */
-.onboarding .settings-btn{opacity:0;transform:translateY(8px);transition:opacity 0.8s ease,transform 0.8s ease,background 0.3s ease,color 0.3s ease}
-.onboarding .settings-btn.reveal{opacity:1;transform:translateY(0)}
-
-/* Animation for settings fade in (normal mode) */
-@keyframes settingsFadeIn{from{opacity:0;transform:scale(0.95)}to{opacity:1;transform:scale(1)}}
-#settings-modal:not(.onboarding){animation:settingsFadeIn 0.3s ease}
 
 /* Clock fade in — staggered: second hand first, then text */
 #clock-container,#second-hand-container,#second-number,#logo{opacity:0}
@@ -118,28 +103,25 @@ body.clock-ready #logo{opacity:0.2}
 <body>
 <div id="intro-screen">
 <div id="intro-title">History Clock</div>
+<div id="intro-logo"><img src="Designed_by_Flovah.png" alt="Designed by FLOVAH"></div>
 <div id="intro-description">히스토리 시계는 인류의 주요한 순간을<br>매 시간 보여드립니다.<br>지난 시간을, 읽어드리겠습니다.</div>
+<div id="intro-touch-hint">화면을 터치해 주세요</div>
 </div>
 
-<div id="settings-overlay">
-<div id="settings-modal">
-<p id="onboarding-msg">먼저, 테마를 골라주세요</p>
-<h3 id="label-theme">테마</h3>
-<div class="settings-group" id="theme-group">
+<div id="settings-bar">
+<div class="bar-section">
+<span class="bar-label">테마</span>
 <button class="settings-btn" data-theme="dark">다크</button>
 <button class="settings-btn" data-theme="light">라이트</button>
 <button class="settings-btn" data-theme="beige">베이지</button>
 <button class="settings-btn" data-theme="navy">네이비</button>
 </div>
-<div class="settings-section-hand">
-<h3 id="label-hand">초침</h3>
-<div class="settings-group">
+<div class="bar-divider"></div>
+<div class="bar-section">
+<span class="bar-label">초침</span>
 <button class="settings-btn" data-hand="off" id="hand-off-btn">끄기</button>
 <button class="settings-btn active" data-hand="needle" id="hand-needle-btn">바늘</button>
 <button class="settings-btn" data-hand="number" id="hand-number-btn">숫자</button>
-</div>
-</div>
-<button id="start-btn">시작</button>
 </div>
 </div>
 
@@ -148,15 +130,15 @@ body.clock-ready #logo{opacity:0.2}
 <div class="tip-msg" id="tip-2">히스토리 클락은<br>가로 모드에 최적화 되어 있습니다</div>
 </div>
 
-<svg id="second-hand-container" viewBox="0 0 400 400">
-<line id="second-hand" x1="200" y1="200" x2="200" y2="30" stroke="rgba(255,255,255,0.3)" stroke-width="1.2" stroke-linecap="round" style="transition:stroke 1.5s ease"/>
+<svg id="second-hand-container" viewBox="0 0 400 400" overflow="visible">
+<line id="second-hand" x1="200" y1="200" x2="200" y2="-21" stroke="rgba(255,255,255,0.3)" stroke-width="1.2" stroke-linecap="round" style="transition:stroke 1.5s ease"/>
 <circle cx="200" cy="200" r="3" fill="rgba(255,255,255,0.15)" style="transition:fill 1.5s ease"/>
 </svg>
 <div id="second-number">00</div>
 <div id="clock-container"><div class="card">
 <div id="time-text"></div><div id="event-text"></div><div id="date-text"></div>
 </div></div>
-<div id="logo">FLOVAH</div>
+<div id="logo"><img src="Designed_by_Flovah.png" alt="Designed by FLOVAH"></div>
 <script>
 const E={
 "00:00":{"t":"자정이 지나고 새로운 하루가\n시작되었습니다","d":"매일"},
@@ -477,31 +459,14 @@ svg.style.display=settings.secondHand==='needle'?'block':'none';
 num.style.display=settings.secondHand==='number'?'block':'none';
 }
 
-function showSettings(onboarding){
-const overlay=document.getElementById('settings-overlay');
-const modal=document.getElementById('settings-modal');
-if(onboarding){
-modal.classList.add('onboarding');
-overlay.classList.add('onboarding-overlay');
-overlay.classList.add('show');
-// 1) 메시지 먼저 등장
-const msg=document.getElementById('onboarding-msg');
-setTimeout(()=>{msg.classList.add('show');},400);
-// 2) 버튼 순차 등장
-const btns=modal.querySelectorAll('[data-theme]');
-btns.forEach((btn,i)=>{
-setTimeout(()=>{btn.classList.add('reveal');},1200+i*400);
-});
-}else{
-modal.classList.remove('onboarding');
-overlay.classList.remove('onboarding-overlay');
-overlay.classList.add('show');
-}
+function showSettings(){
+const bar=document.getElementById('settings-bar');
+bar.classList.toggle('show');
 }
 
 function hideSettings(){
-const overlay=document.getElementById('settings-overlay');
-overlay.classList.remove('show');
+const bar=document.getElementById('settings-bar');
+bar.classList.remove('show');
 }
 
 function hideIntro(){
@@ -510,7 +475,17 @@ intro.classList.add('hidden');
 setTimeout(()=>{
 intro.style.display='none';
 settings.hasSeenIntro=true;
-showSettings(true);
+// 팁 메시지 → 시계 시작
+const tip1=document.getElementById('tip-1');
+const tip2=document.getElementById('tip-2');
+setTimeout(()=>{tip1.classList.add('show');},500);
+setTimeout(()=>{tip1.classList.add('fade-out');},2800);
+setTimeout(()=>{tip2.classList.add('show');},4500);
+setTimeout(()=>{tip2.classList.add('fade-out');},6800);
+setTimeout(()=>{
+document.getElementById('tip-screen').style.display='none';
+document.body.classList.add('clock-ready');
+},8500);
 },800);
 }
 
@@ -520,6 +495,7 @@ let _introLock=false;
 let _autoTimer=null;
 function startIntro(){
 const title=document.getElementById('intro-title');
+const introLogo=document.getElementById('intro-logo');
 const desc=document.getElementById('intro-description');
 const intro=document.getElementById('intro-screen');
 
@@ -530,6 +506,8 @@ if(_autoTimer){clearTimeout(_autoTimer);_autoTimer=null;}
 _introStep++;
 if(_introStep===1){
 title.classList.remove('show');
+introLogo.classList.remove('show');
+touchHint.classList.add('hide');
 setTimeout(()=>{
 desc.classList.add('show');
 _introLock=false;
@@ -541,28 +519,26 @@ setTimeout(()=>{hideIntro();_introLock=false;},2200);
 }
 }
 
-// 타이틀 3초에 걸쳐 서서히 등장
-setTimeout(()=>{title.classList.add('show');},500);
+// 타이틀 3초에 걸쳐 서서히 등장, 로고도 함께
+setTimeout(()=>{title.classList.add('show');introLogo.classList.add('show');},500);
+// 4.5초 후 터치 힌트 나타남
+const touchHint=document.getElementById('intro-touch-hint');
+setTimeout(()=>{touchHint.classList.add('show');},4500);
 // 8초 후 자동 진행
 _autoTimer=setTimeout(goNext,8000);
 
-intro.addEventListener('click',goNext);
-intro.addEventListener('touchend',(e)=>{e.preventDefault();goNext();},{passive:false});
+function hideHint(){touchHint.classList.add('hide');}
+intro.addEventListener('click',()=>{hideHint();goNext();});
+intro.addEventListener('touchend',(e)=>{e.preventDefault();hideHint();goNext();},{passive:false});
 }
 
 // Settings buttons
-let _themeSelected=false;
 document.querySelectorAll('[data-theme]').forEach(btn=>{
 btn.addEventListener('click',()=>{
 document.querySelectorAll('[data-theme]').forEach(b=>b.classList.remove('active'));
 btn.classList.add('active');
 settings.theme=btn.dataset.theme;
 applyTheme();
-// 온보딩 중 테마 선택 시 시작 버튼 등장
-if(!_themeSelected){
-_themeSelected=true;
-setTimeout(()=>{document.getElementById('start-btn').classList.add('visible');},600);
-}
 });
 });
 
@@ -573,36 +549,6 @@ btn.classList.add('active');
 settings.secondHand=btn.dataset.hand;
 updateSecondHandVisibility();
 });
-});
-
-document.getElementById('start-btn').addEventListener('click',()=>{
-hideSettings();
-if(!document.body.classList.contains('clock-ready')){
-const tip1=document.getElementById('tip-1');
-const tip2=document.getElementById('tip-2');
-// 1) 첫 번째 팁 등장
-setTimeout(()=>{tip1.classList.add('show');},500);
-// 2초 머문 후 사라짐
-setTimeout(()=>{tip1.classList.add('fade-out');},2800);
-// 2) 두 번째 팁 등장
-setTimeout(()=>{tip2.classList.add('show');},4500);
-// 2초 머문 후 사라짐
-setTimeout(()=>{tip2.classList.add('fade-out');},6800);
-// 3) 시계 시작
-setTimeout(()=>{
-document.getElementById('tip-screen').style.display='none';
-document.body.classList.add('clock-ready');
-},8500);
-}
-});
-
-// Settings overlay click handler (close on background click)
-document.getElementById('settings-overlay').addEventListener('click',(e)=>{
-if(e.target.id==='settings-overlay'){
-// 온보딩 중에는 배경 클릭으로 닫지 않음
-if(document.getElementById('settings-modal').classList.contains('onboarding'))return;
-hideSettings();
-}
 });
 
 function pad(n){return String(n).padStart(2,'0')}
@@ -645,11 +591,13 @@ setTimeout(()=>{el.classList.remove('flip-out');el.classList.add('flip-in');},i*
 requestWakeLock();update();setInterval(update,1000);
 window.addEventListener('resize',()=>{lastKey='';update()});
 
-// Clock interaction (open settings on click)
-document.getElementById('clock-container').addEventListener('click',()=>{
-if(settings.hasSeenIntro){
-showSettings(false);
-}
+// 화면 터치로 하단 툴바 토글
+document.addEventListener('click',(e)=>{
+if(!settings.hasSeenIntro)return;
+// 툴바 내부 클릭은 무시
+if(document.getElementById('settings-bar').contains(e.target))return;
+const bar=document.getElementById('settings-bar');
+bar.classList.toggle('show');
 });
 
 // Apply initial settings and start intro
@@ -657,12 +605,6 @@ applyTheme();
 updateSecondHandVisibility();
 startIntro();
 
-// Logo toggle
-let logoVisible=true;
-document.body.addEventListener('click',()=>{
-logoVisible=!logoVisible;
-document.getElementById('logo').style.opacity=logoVisible?'0.2':'0';
-});
 </script>
 </body>
 </html>
